@@ -1,0 +1,88 @@
+.foot {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 60px;
+    font-family: var(--mont);
+}
+
+.foot h2 {
+    font-size: 40px;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.foot p {
+    font-size: 24px;
+    color: hsl(0, 0%, 40%);
+    letter-spacing: -1px;
+}
+
+.foot input {
+    width: 60dvb;
+    padding: 20px;
+    height: 20px;
+    margin: 20px;
+    border: 2px solid hsl(0, 0%, 80%);
+    font-size: 18px;
+    border-radius: 50px;
+}
+
+.foot input::placeholder {
+    font-size: 18px;
+    color: hsl(0, 0%, 56%);
+}
+
+.foot input:focus {
+    outline: none;
+}
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 60px 10px 60px;
+}
+
+footer p {
+    font-size: 18px;
+    color: hsl(0, 0%, 40%);
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.socials {
+    display: flex;
+    gap: 12px;
+}
+
+footer img {
+    height: 35px;
+}
+
+@media (max-width:1024px) {
+    .foot {
+        padding: 10px 50px;
+    }
+
+    .foot h2 {
+        font-size: 37px;
+        margin-bottom: 10px;
+    }
+
+    .foot p {
+        font-size: 20px;
+    }
+    .foot input {
+        width: 30dvb;
+        padding: 20px;
+        height: 15px;
+        margin: 15px;
+        font-size: 16px;
+        border-radius: 50px;
+    }
+    .foot input::placeholder {
+        font-size: 16px;
+    }
+
+}

@@ -1,0 +1,65 @@
+.popup-container {
+    position: fixed;
+    top: 8%;
+    right: 40px;
+    z-index: 999;
+}
+
+.popup-box {
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    width: 300px;
+    background-color: hsl(0, 0%, 100%);
+    border: 1px solid hsl(0, 0%, 80%);
+}
+
+.pop-head {
+    font-family: var(--mont);
+    margin-bottom: 10px;
+    color: hsl(0, 0%, 50%);
+}
+
+.pop-sign {
+    margin-bottom: 20px;
+    background-color: black;
+    color: hsl(0, 0%, 90%);
+}
+
+.pop-log {
+    background-color: hsl(0, 0%, 80%);
+}
+
+.popup-container button {
+    border: none;
+    width: 100%;
+    margin: 4px 0;
+    padding: 20px;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 500;
+    font-family: var(--inter);
+}
+
+.pop-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.pop-pro,
+.pop-ord {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: hsl(0, 0%, 86%);
+}
+
+.pop-buttons img {
+    width: 30px;
+    height: 30px;
+}
+
+.pop-ord img {
+    width: 35px;
+    height: 32px;
+}

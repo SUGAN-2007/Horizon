@@ -1,0 +1,33 @@
+.notfound {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100dvh
+}
+.not {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+}
+.not h1{
+    font-family: var(--mont);
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: hsl(0, 0%, 20%);
+}
+.not button{
+    margin: 5px;
+    padding: 15px 40px;
+    font-size: 15px;
+    font-family: var(--inter);
+    font-weight: 600;
+    border: none;
+    background-color: hsl(0, 0%, 70%);
+    border-radius: 10px;
+    transition: 1s ease;
+}
+.not button:hover{
+    transform: translate(-2px,-2px);
+}

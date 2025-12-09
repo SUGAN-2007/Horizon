@@ -1,0 +1,48 @@
+
+.poster {
+    width: 100%;
+    height: 50%dvh;
+    object-fit: cover;
+}
+
+.pos-head {
+    font-family: var(--mont);
+    font-size: 4.6rem;
+    width: 55%;
+    font-weight: 800;
+    position: absolute;
+    top: 9.5rem;
+    left: 6rem;
+    color: hsl(0, 0%, 20%);
+    line-height: 60px;
+    overflow-y: hidden;
+}
+
+.pos-head span {
+    color: hsl(0, 0%, 0%);
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+.pos-des {
+    position: absolute;
+    top: 25rem;
+    left: 6.5rem;
+    font-family: var(--inter);
+    font-size: 1.5rem;
+    width: 40%;
+    color: hsl(0, 0%, 30%);
+    font-weight: 600;
+    line-height: 35px;
+    overflow-y: hidden;
+}
+@media(max-width : 1024px){
+        .pos-head {
+            font-size: 3.5rem;
+        }
+        .pos-des{
+            top: 23rem;
+            font-size: 1.2rem;
+            line-height: 30px;
+        }
+}
