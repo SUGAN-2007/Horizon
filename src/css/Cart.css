@@ -187,6 +187,10 @@ hr {
         font-size: 14px;
         padding: 0 13px;
     }
+
+    .skeleton-box {
+        height: 200px;
+    }
 }
 
 @media (max-width : 900px) {
@@ -239,5 +243,50 @@ hr {
         padding: 7px 10px;
         font-size: 10px;
         width: 55%;
+    }
+}
+
+@media (max-width : 400px) {
+    .cart-image img {
+        height: 140px;
+    }
+    
+    .skeleton-box {
+        height: 140px;
+    }
+}
+
+/* for toast */
+
+@media (max-width: 1024px) {
+    .toast {
+        font-size: 12px;
+        padding: 14px 22px;
+        bottom: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .toast {
+        font-size: 11px;
+        padding: 12px 20px;
+        bottom: 22px;
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .toast {
+        width: 90%;
+        justify-content: center;
+        text-align: center;
+
+        font-size: 10.5px;
+        padding: 12px 18px;
+        bottom: 18px;
+    }
+
+    .toast-icon {
+        font-size: 14px;
     }
 }

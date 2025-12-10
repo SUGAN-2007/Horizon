@@ -38,7 +38,7 @@ function Contact() {
             {toast && (
                 <div className="toast-bottom">
                     <span className="toast-icon">✔</span>
-                    <p>Email sent successfully!</p>
+                    <p className="toast-text">Email sent successfully!</p>
                 </div>
             )}
 
