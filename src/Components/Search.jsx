@@ -5,14 +5,12 @@ function Search({ setSrch}) {
     const [query, setQuery] = useState("");
     const [products, setProducts] = useState([]);
 
-    // Fetch ONCE
     useEffect(() => {
         fetch("https://fakestoreapi.com/products")
             .then((res) => res.json())
             .then((data) => setProducts(data));
     }, []);
 
-    // Filter products by title
     const results = products.filter((item) =>
         item.title.toLowerCase().includes(query.toLowerCase())
     );

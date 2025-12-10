@@ -67,7 +67,7 @@
     .popup-container {
         position: fixed;
         top: 8%;
-        right: 20px; /* smaller for mobile */
+        right: 20px;
         z-index: 999;
     }
 
@@ -75,7 +75,7 @@
         background: white;
         padding: 16px;
         border-radius: 16px;
-        width: 260px; /* tighter for mobile */
+        width: 260px;
         border: 1px solid hsl(0, 0%, 80%);
     }
 

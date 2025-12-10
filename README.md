@@ -1,16 +1,94 @@
-# React + Vite
+# Horizon - E-Commerce Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive e-commerce website built with React and CSS. Horizon is a forward-driven clothing brand platform featuring a clean, modern design with seamless shopping experience.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React** - Frontend framework
+- **CSS** - Styling and responsive design
+- **React Router DOM** - Client-side routing
+- **Vite** - Build tool and development server
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 🏠 **Home Page** - Featured products and brand showcase
+- 🛍️ **Shop Page** - Browse and explore product catalog
+- 🔍 **Search Functionality** - Real-time product search
+- 🛒 **Shopping Cart** - Add items to cart and manage orders
+- 👤 **User Account** - Login and profile management
+- 📧 **Contact Form** - Get in touch with the team
+- 📱 **Responsive Design** - Optimized for all devices
 
-## Expanding the ESLint configuration
+## Project Structure
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```
+src/
+├── Components/      # Reusable React components
+│   ├── Nav.jsx      # Navigation bar
+│   ├── Cart.jsx     # Product cart component
+│   ├── Search.jsx   # Search functionality
+│   ├── Footer.jsx   # Footer component
+│   └── ...
+├── Pages/           # Page components
+│   ├── Home.jsx     # Home page
+│   ├── Shop.jsx     # Shop page
+│   ├── Contact.jsx  # Contact page
+│   └── ...
+├── css/             # Stylesheet files
+│   ├── App.css
+│   ├── Nav.css
+│   ├── Cart.css
+│   └── ...
+└── App.jsx          # Main application component
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository
+```bash
+git clone <repository-url>
+cd E-com
+```
+
+2. Install dependencies
+```bash
+npm install
+```
+
+3. Start the development server
+```bash
+npm run dev
+```
+
+4. Open your browser and navigate to `http://localhost:5173`
+
+## Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+
+## API Integration
+
+The project uses the Fake Store API for product data:
+- Product listing: `https://fakestoreapi.com/products`
+
+## Responsive Design
+
+The website is fully responsive and optimized for:
+- Desktop (1024px+)
+- Tablets (768px - 1024px)
+- Mobile devices (480px - 768px)
+- Small mobile devices (< 480px)
+
+## License
+
+This project is private and proprietary.

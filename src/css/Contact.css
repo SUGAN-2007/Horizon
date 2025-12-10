@@ -1,9 +1,5 @@
-/* ===========================
-   CONTACT PAGE — BASE
-=========================== */
-
 .contact-section {
-    background: #fafafa; /* soft background to remove empty feel */
+    background: #fafafa;
     padding: 60px 0;
 }
 
@@ -42,7 +38,6 @@
     flex: 1;
 }
 
-/* INPUT + TEXTAREA FIX */
 .contact-form input,
 .contact-form textarea {
     padding: 16px;
@@ -59,7 +54,6 @@
     border-color: black;
 }
 
-/* CENTER SUBMIT BUTTON */
 .submit-btn {
     width: 140px;
     margin: 10px auto;
@@ -77,7 +71,6 @@
     opacity: 0.85;
 }
 
-/* Toast */
 .toast-bottom {
     position: fixed;
     bottom: 30px;
@@ -109,20 +102,10 @@
     to { transform: translate(-50%, 0); opacity: 1; }
 }
 
-
-/* ===================================================
-   FIX EMPTY SPACE — PULL FOOTER UP & FILL BACKGROUND
-=================================================== */
-
 .join-container {
     margin-top: 40px !important;
 }
 
-
-
-/* ===========================
-   RESPONSIVE — 1024px
-=========================== */
 @media (max-width: 1024px) {
 
     .contact-container {
@@ -158,10 +141,6 @@
     }
 }
 
-
-/* ===========================
-   RESPONSIVE — 768px (TABLET)
-=========================== */
 @media (max-width: 768px) {
 
     .contact-container {
@@ -199,10 +178,6 @@
     }
 }
 
-
-/* ===========================
-   RESPONSIVE — 480px (MOBILE)
-=========================== */
 @media (max-width: 480px) {
 
     .contact-container {

@@ -83,12 +83,11 @@
     }
 }
 
-/* MOBILE (max-width: 600px) */
 @media (max-width: 600px) {
 
     .nav {
         padding: 0px 20px;
-        height: 60px;              /* Stable mobile height */
+        height: 60px;
     }
 
     .nav-head {
@@ -96,12 +95,12 @@
     }
 
     .nav-header {
-        font-size: 18px;           /* Smaller brand text */
+        font-size: 18px;
     }
 
     .nav-shop,
     .nav-contact {
-        font-size: 12px;           /* Smaller menu text */
+        font-size: 12px;
         margin: 4px 0 0 0;
     }
 
@@ -111,6 +110,6 @@
 
     .nav-img img {
         width: 20px;
-        height: 20px;              /* Fit mobile scale */
+        height: 20px;
     }
 }
