@@ -199,3 +199,45 @@ hr {
         padding: 8px;
     }
 }
+
+@media (max-width: 600px) {
+
+    .fea-pro {
+        font-size: 24px;
+        margin: 10px 15px 10px 15px;
+        text-align: center;
+    }
+
+    .cart {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+        padding: 10px 10px;
+    }
+
+    .cart-card {
+        padding: 8px;
+        border-radius: 4px;
+    }
+
+    .cart-image img {
+        height: 160px;
+    }
+
+    .product-name {
+        font-size: 11px;
+        margin-bottom: 6px;
+        padding: 0 5px;
+    }
+
+    .product-price {
+        font-size: 10px;
+        padding: 0 8px;
+        text-align: center;
+    }
+
+    .add-btn {
+        padding: 7px 10px;
+        font-size: 10px;
+        width: 55%;
+    }
+}

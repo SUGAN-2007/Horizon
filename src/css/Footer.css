@@ -73,6 +73,7 @@ footer img {
     .foot p {
         font-size: 20px;
     }
+
     .foot input {
         width: 30dvb;
         padding: 20px;
@@ -81,6 +82,7 @@ footer img {
         font-size: 16px;
         border-radius: 50px;
     }
+
     .foot input::placeholder {
         font-size: 16px;
     }
@@ -95,9 +97,11 @@ footer img {
         font-size: 35px;
         margin-bottom: 10px;
     }
+
     .foot p {
         font-size: 16px;
     }
+
     .foot input {
         width: 25dvb;
         padding: 15px;
@@ -106,7 +110,54 @@ footer img {
         font-size: 16px;
         border-radius: 50px;
     }
+
     .foot input::placeholder {
         font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .foot {
+        padding: 5px 30px;
+    }
+
+    .foot h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .foot p {
+        font-size: 10px;
+    }
+
+    .foot input {
+        width: 80%;
+        padding: 10px;
+        height: 10px;
+        margin: 10px;
+        font-size: 10px;
+        border-radius: 50px;
+    }
+
+    .foot input::placeholder {
+        font-size: 10px;
+    }
+
+    .socials {
+        display: flex;
+        gap: 6px;
+    }
+
+    footer img {
+        height: 25px;
+    }
+
+    footer p {
+        font-size: 12px;
+    }
+
+    footer {
+
+        padding: 0 30px 5px 30px;
     }
 }
