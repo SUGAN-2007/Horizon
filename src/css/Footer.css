@@ -84,5 +84,29 @@ footer img {
     .foot input::placeholder {
         font-size: 16px;
     }
+}
 
+@media (max-width: 900px) {
+    .foot {
+        padding: 10px 40px;
+    }
+
+    .foot h2 {
+        font-size: 35px;
+        margin-bottom: 10px;
+    }
+    .foot p {
+        font-size: 16px;
+    }
+    .foot input {
+        width: 25dvb;
+        padding: 15px;
+        height: 15px;
+        margin: 15px;
+        font-size: 16px;
+        border-radius: 50px;
+    }
+    .foot input::placeholder {
+        font-size: 16px;
+    }
 }

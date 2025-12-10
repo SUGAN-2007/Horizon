@@ -113,3 +113,8 @@
         width: 50%;
     }
 }
+@media(max-width:900px) {
+    .addcart {
+        width: 60%;
+    }
+}

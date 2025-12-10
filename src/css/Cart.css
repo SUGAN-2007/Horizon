@@ -160,7 +160,6 @@ hr {
 
 @media(max-width:1024px) {
     .fea-pro {
-
         font-size: 32px;
         margin: 30px 20px 20px 20px;
     }
@@ -187,5 +186,16 @@ hr {
     .product-price {
         font-size: 14px;
         padding: 0 13px;
+    }
+}
+
+@media (max-width : 900px) {
+    .cart {
+        gap: 15px;
+        padding: 10px 20px;
+    }
+
+    .cart-card {
+        padding: 8px;
     }
 }

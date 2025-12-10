@@ -1,4 +1,3 @@
-
 .poster {
     width: 100%;
     height: 50%dvh;
@@ -36,13 +35,21 @@
     line-height: 35px;
     overflow-y: hidden;
 }
-@media(max-width : 1024px){
-        .pos-head {
-            font-size: 3.5rem;
-        }
-        .pos-des{
-            top: 23rem;
-            font-size: 1.2rem;
-            line-height: 30px;
-        }
+
+@media(max-width : 1024px) {
+    .pos-head {
+        font-size: 3.5rem;
+    }
+
+    .pos-des {
+        top: 23rem;
+        font-size: 1.2rem;
+        line-height: 30px;
+    }
+}
+
+@media (max-width : 900px) {
+    .pos-des {
+        display: none;
+    }
 }

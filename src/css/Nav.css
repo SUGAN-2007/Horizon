@@ -59,3 +59,26 @@
         height: 4dvb;
     }
 }
+@media(max-width : 900px) {
+    .nav-head {
+        gap: 1.5dvb;
+    }
+
+    .nav-header {
+        font-size: 3dvb;
+    }
+
+    .nav-shop,
+    .nav-contact {
+        font-size: 1.8dvb;
+        margin: 9px 0 0 0 ;
+    }
+    .nav-img{
+        gap: 2dvb;
+    }
+
+    .nav-img img {
+        width: 3.5dvb;
+        height: 3.5dvb;
+    }
+}
