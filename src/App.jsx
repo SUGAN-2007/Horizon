@@ -5,7 +5,7 @@ import Shop from "./Pages/Shop";
 import Notfound from "./Pages/Notfound";
 import Description from "./Pages/Description";
 import Contact from "./Pages/Contact";
-import './css/main.css'
+import './css/App.css'
 
 function App() {
     const [products, setProducts] = useState([]);
