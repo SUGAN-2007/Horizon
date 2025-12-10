@@ -1,8 +1,8 @@
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import '../css/Cart.css';
 function Cart({ num, products, cart, setCart }) {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const [toast, setToast] = useState(false);
 
     const fillers = Math.max(0, num - products.length);
