@@ -13,7 +13,7 @@
 /* Main popup */
 .search-box {
     position: fixed;
-    top: 15%;
+    top: 12%;
     left: 50%;
     transform: translateX(-50%);
     width: 600px;
@@ -86,4 +86,66 @@
     text-align: center;
     color: #777;
     padding: 30px 0;
+}
+
+/* ===========================
+   RESPONSIVE BREAKPOINTS
+=========================== */
+
+/* Tablets */
+@media (max-width: 768px) {
+    .search-box {
+        width: 90%;
+        top: 10%;
+        padding: 18px;
+    }
+
+    .search-head input {
+        font-size: 16px;
+    }
+
+    .search-item img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .s-title {
+        font-size: 15px;
+    }
+}
+
+/* Smartphones */
+@media (max-width: 480px) {
+    .search-box {
+        width: 92%;
+        top: 8%;
+        padding: 15px;
+        max-height: 75vh;
+        border-radius: 12px;
+    }
+
+    .search-head {
+        gap: 8px;
+    }
+
+    .search-head input {
+        font-size: 15px;
+    }
+
+    .close-btn {
+        font-size: 26px;
+    }
+
+    .search-item img {
+        width: 45px;
+        height: 45px;
+    }
+
+    .s-title {
+        font-size: 14px;
+    }
+
+    .s-price {
+        font-size: 12px;
+    }
 }
