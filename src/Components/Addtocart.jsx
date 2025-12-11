@@ -24,7 +24,7 @@ function Addtocart({ setOpencart, cart, setCart }) {
                             {safeCart.map((item) => (
                                 <div className="cart-card" id='cart-card' key={item.id}>
                                     <div className='cart-image'>
-                                        <img className='pop-img' src={item.image} alt={item.title} />
+                                        <img className='pop-img' src={item.images} alt={item.title} />
                                     </div>
                                     <div className='cart-info'>
                                         <p className='product-name'>{item.title}</p>

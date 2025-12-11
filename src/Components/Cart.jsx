@@ -25,7 +25,7 @@ function Cart({ num, products, cart, setCart }) {
                                 <button
                                     className="add-btn"
                                     onClick={() => {
-                                        setCart(prev => [...prev, item]);
+                                        setCart([...cart, item]);
                                         setToast(true);
                                         setTimeout(() => setToast(false), 1000);
                                     }}

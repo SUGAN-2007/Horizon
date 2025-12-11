@@ -6,11 +6,22 @@ function Search({ setSrch}) {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-        fetch("https://fakestoreapi.com/products")
-            .then((res) => res.json())
-            .then((data) => setProducts(data));
+        const fetchProducts = async () => {
+            try {
+                const res = await fetch(
+                    "https://api.escuelajs.co/api/v1/categories/1/products"
+                );
+                const data = await res.json();
+                setProducts(data);
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            }
+        };
+        fetchProducts();
+        // fetch('https://fakestoreapi.com/products')
+        //     .then(res => res.json())
+        //     .then(data => setProducts(data))
     }, []);
-
     const results = products.filter((item) =>
         item.title.toLowerCase().includes(query.toLowerCase())
     );
@@ -39,7 +50,7 @@ function Search({ setSrch}) {
                     ) : (
                         results.map((item) => (
                             <div className="search-item" key={item.id}>
-                                <img src={item.image} alt={item.title} />
+                                <img src={item.images} alt={item.title} />
                                 <div>
                                     <p className="s-title">{item.title}</p>
                                     <p className="s-price">${item.price}</p>
