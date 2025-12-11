@@ -10,21 +10,21 @@ import './css/App.css'
 function App() {
     const [products, setProducts] = useState([]);
     useEffect(() => {
-        // const fetchProducts = async () => {
-        //     try {
-        //         const res = await fetch(
-        //             "https://api.escuelajs.co/api/v1/categories/1/products"
-        //         );
-        //         const data = await res.json();
-        //         setProducts(data);
-        //     } catch (error) {
-        //         console.error("Error fetching products:", error);
-        //     }
-        // };
-        // fetchProducts();
-        fetch('https://fakestoreapi.com/products')
-            .then(res => res.json())
-            .then(data => setProducts(data))
+        const fetchProducts = async () => {
+            try {
+                const res = await fetch(
+                    "https://api.escuelajs.co/api/v1/categories/1/products"
+                );
+                const data = await res.json();
+                setProducts(data);
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            }
+        };
+        fetchProducts();
+        // fetch('https://fakestoreapi.com/products')
+        //     .then(res => res.json())
+        //     .then(data => setProducts(data))
     }, []);
     return (
         <Routes>

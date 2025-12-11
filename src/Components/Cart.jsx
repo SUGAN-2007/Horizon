@@ -12,7 +12,7 @@ function Cart({ num, products, cart, setCart }) {
                 {products.slice(0, num).map(item => (
                     <div className="cart-card" key={item.id}>
                         <div className='cart-image'>
-                            <img className='pop-img' src={item.image} alt={item.title} onError={(e) => {
+                            <img className='pop-img' src={item.images} alt={item.title} onError={(e) => {
                                 e.target.style.display = "none";
                                 e.target.parentNode.classList.add("skeleton-box");
                             }} />
@@ -25,7 +25,7 @@ function Cart({ num, products, cart, setCart }) {
                                 <button
                                     className="add-btn"
                                     onClick={() => {
-                                        ssetCart(prev => [...prev, item]);
+                                        setCart(prev => [...prev, item]);
                                         setToast(true);
                                         setTimeout(() => setToast(false), 1000);
                                     }}
