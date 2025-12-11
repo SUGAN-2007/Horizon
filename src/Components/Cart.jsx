@@ -1,6 +1,7 @@
 // import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import '../css/Cart.css';
+import Toast from './toast';
 function Cart({ num, products, cart, setCart }) {
     // const navigate = useNavigate();
     const [toast, setToast] = useState(false);
@@ -48,11 +49,7 @@ function Cart({ num, products, cart, setCart }) {
                     </div>
                 ))}
             </div >
-            {toast &&
-                <div className="toast-bottom">
-                    <div className="toast-icon">✔</div>
-                    <div className="toast-text">Added to cart Successfully </div>
-                </div>
+            {toast &&   <Toast message={"Added to cart Successfully"} />
             }
         </>
     )

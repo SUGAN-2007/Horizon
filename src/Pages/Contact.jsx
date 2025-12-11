@@ -2,6 +2,7 @@ import { useState } from "react";
 import Nav from "../Components/Nav";
 import Footer from "../Components/Footer";
 import "../css/Contact.css";
+import Toast from "../Components/toast";
 
 function Contact() {
     const [toast, setToast] = useState(false);
@@ -35,12 +36,7 @@ function Contact() {
         <>
             <Nav />
 
-            {toast && (
-                <div className="toast-bottom">
-                    <span className="toast-icon">✔</span>
-                    <p className="toast-text">Email sent successfully!</p>
-                </div>
-            )}
+            {toast && <Toast message={"Email sent successfully!"}/>}
 
             <div className="contact-container">
                 <h1>Contact</h1>

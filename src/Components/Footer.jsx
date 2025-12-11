@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import '../css/Footer.css';
+import Toast from './toast';
 function Footer() {
     const [showToast, setShowToast] = useState(false);
     return (
@@ -31,12 +32,7 @@ function Footer() {
                     <img src="/footer/mes.png" alt="" />
                 </div>
             </footer>
-            {showToast && (
-                <div className="toast-bottom">
-                    <div className="toast-icon">✔</div>
-                    <div className="toast-text">Joined Successfully.</div>
-                </div>
-            )}
+            {showToast && <Toast message={"Joined Successfully."} />}
 
         </>
     );

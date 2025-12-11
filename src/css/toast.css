@@ -1,0 +1,50 @@
+.toast-fixed {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5000;
+
+    background: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    box-shadow: 2px 2px 8px 2px black;
+
+    padding: 15px 22px;
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    font-size: 13px;
+    font-weight: 600;
+    font-family: var(--mont);
+
+    opacity: 0;
+
+    animation: toastFadeIn 0.35s ease-out forwards,
+               toastFadeOut 0.35s ease-in 2.3s forwards;
+}
+
+/* Only Y moves. X stays locked always */
+@keyframes toastFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(25px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+@keyframes toastFadeOut {
+    0% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(25px);
+    }
+}
