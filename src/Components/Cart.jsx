@@ -1,9 +1,10 @@
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import '../css/Cart.css';
 import Toast from './toast';
+import Description from '../Pages/Description';
 function Cart({ num, products, cart, setCart }) {
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
     const [toast, setToast] = useState(false);
 
     const fillers = Math.max(0, num - products.length);
@@ -13,14 +14,14 @@ function Cart({ num, products, cart, setCart }) {
                 {products.slice(0, num).map(item => (
                     <div className="cart-card" key={item.id}>
                         <div className='cart-image'>
-                            <img className='pop-img' src={item.images} alt={item.title} onError={(e) => {
+                            <img onClick={() => navigate(`/product/${item.id}`)} className='pop-img' src={item.images} alt={item.title} onError={(e) => {
                                 e.target.style.display = "none";
                                 e.target.parentNode.classList.add("skeleton-box");
                             }} />
                         </div>
                         <div className='cart-info'>
-                            <p className='product-name'>{item.title}</p>
-                            {/* onClick={() => navigate(`/product/${item.id}`)} */}
+                            <p onClick={() => navigate(`/product/${item.id}`)} className='product-name'>{item.title}</p>
+
                             <div className='cart-btn'>
                                 <p className='product-price'>${item.price}</p>
                                 <button
@@ -49,7 +50,7 @@ function Cart({ num, products, cart, setCart }) {
                     </div>
                 ))}
             </div >
-            {toast &&   <Toast message={"Added to cart Successfully"} />
+            {toast && <Toast message={"Added to cart Successfully"} />
             }
         </>
     )

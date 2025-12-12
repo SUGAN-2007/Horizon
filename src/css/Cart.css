@@ -29,6 +29,7 @@
 .cart-image img {
     background: hsl(0, 0%, 86%);
     width: 100%;
+    cursor: pointer;
     height: 240px;
     border-radius: 2px;
     cursor: pointer;

@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import '../css/addtocart.css';
 
 function Addtocart({ setOpencart, cart, setCart }) {
     const safeCart = Array.isArray(cart) ? cart : [];
+    const navigate = useNavigate();
     return (
         <>
             <div className="cart-in">
@@ -24,10 +26,10 @@ function Addtocart({ setOpencart, cart, setCart }) {
                             {safeCart.map((item) => (
                                 <div className="cart-card" id='cart-card' key={item.id}>
                                     <div className='cart-image'>
-                                        <img className='pop-img' src={item.images} alt={item.title} />
+                                        <img onClick={() => navigate(`/product/${item.id}`)} className='pop-img' src={item.images} alt={item.title} />
                                     </div>
                                     <div className='cart-info'>
-                                        <p className='product-name'>{item.title}</p>
+                                        <p className='product-name' onClick={() => navigate(`/product/${item.id}`)}>{item.title}</p>
                                         <div className='cart-btn'>
                                             <p className='product-price ' id='add-pri'>${item.price}</p>
                                             <button className='add-btn' id='add-btn'>Order</button>
