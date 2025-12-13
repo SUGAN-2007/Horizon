@@ -89,6 +89,3 @@ The website is fully responsive and optimized for:
 - Mobile devices (480px - 768px)
 - Small mobile devices (< 480px)
 
-## License
-
-This project is private and proprietary.
