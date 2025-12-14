@@ -32,7 +32,7 @@ function App() {
             <Route path="/" element={<Home products={products} cart={cart} setCart={setCart} />} />
             <Route path="/Shop" element={<Shop products={products} cart={cart} setCart={setCart} />} />
             <Route path="/Contact" element={<Contact />} />
-            <Route path="/product/:id" element={<Description />} />
+            <Route path="/product/:id" element={<Description cart={cart} setCart={setCart} />} />
             <Route path="*" element={<Notfound />} />
         </Routes>
     );

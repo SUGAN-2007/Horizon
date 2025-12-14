@@ -4,7 +4,7 @@ import Nav from "../Components/Nav";
 import '../css/Des.css'
 import Footer from "../Components/Footer";
 
-export default function Description() {
+export default function Description({cart, setCart}) {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
 
@@ -38,11 +38,6 @@ export default function Description() {
         return () => { mounted = false };
     }, [id]);
 
-    const handleAdd = () => {
-        setToast(true);
-        setTimeout(() => setToast(false), 2400);
-    };
-
     if (!product) return <p className="loading">Loading...</p>;
 
     const numericRating = parseFloat(rating);
@@ -51,7 +46,7 @@ export default function Description() {
 
     return (
         <>
-            <Nav />
+            <Nav cart={cart} setCart={setCart} />
 
             <div className="desc-container">
                 <div className="desc-image-box">
@@ -93,28 +88,33 @@ export default function Description() {
                         </div>
                     </div>
                     <div className="des-add-cart">
-                        <button className="add-cart-btn" onClick={handleAdd}>
+                        <button className="add-cart-btn" onClick={() => {
+                            setCart([...cart, product]);
+                            setToast(true);
+                            setTimeout(() => setToast(false), 1000);
+                        }}>
                             Add to Cart
                         </button>
-                    </div>
-
-                    <div className="details-box">
-                        <p><strong>Category:</strong> {product.category?.name}</p>
-                        <p><strong>Stock:</strong> In Stock</p>
-                        <p><strong>Material:</strong> Premium Fabric</p>
-                    </div>
-
-                    <p className="desc-text">{product.description}</p>
                 </div>
-            </div>
 
-            {toast && (
+                <div className="details-box">
+                    <p><strong>Category:</strong> {product.category?.name}</p>
+                    <p><strong>Stock:</strong> In Stock</p>
+                    <p><strong>Material:</strong> Premium Fabric</p>
+                </div>
+
+                <p className="desc-text">{product.description}</p>
+            </div>
+        </div >
+
+            { toast && (
                 <div className="toast-fixed">
                     <span>✓</span>
                     <span>Added to Cart</span>
                 </div>
-            )}
-            <Footer/>
+            )
+}
+<Footer />
         </>
     );
 }
