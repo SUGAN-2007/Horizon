@@ -2,6 +2,7 @@ import { useState } from 'react';
 import '../css/Footer.css';
 import Toast from './toast';
 function Footer() {
+    const [foot,setFoot] = useState("");
     const [showToast, setShowToast] = useState(false);
     return (
         <>
@@ -12,10 +13,11 @@ function Footer() {
                     <p>Get the deals and early access</p>
                 </div>
                 <div className='foot-right'>
-                    <input type="email" onKeyDown={(e) => {
+                    <input type="email" value={foot} onChange={(e) => setFoot(e.target.value)} onKeyDown={(e) => {
                         if (e.key === "Enter") {
                             setShowToast(true);
                             setTimeout(() => setShowToast(false), 5000);
+                            setFoot("")
                         }
                     }} placeholder="Email address" />
                 </div>

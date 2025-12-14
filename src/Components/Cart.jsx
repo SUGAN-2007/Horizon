@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import '../css/Cart.css';
 import Toast from './toast';
-import Description from '../Pages/Description';
+
 function Cart({ num, products, cart, setCart }) {
     const navigate = useNavigate();
     const [toast, setToast] = useState(false);
