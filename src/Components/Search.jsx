@@ -11,7 +11,7 @@ function Search({ setSrch }) {
         const fetchProducts = async () => {
             try {
                 const res = await fetch(
-                    "https://api-rbso.onrender.com/api/clothes/"
+                    "https://api-com.up.railway.app/api/clothes"
                 );
                 const data = await res.json();
                 setProducts(data);
