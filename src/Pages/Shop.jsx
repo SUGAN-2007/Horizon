@@ -6,7 +6,7 @@ function Shop({products,cart,setCart}) {
     return (
         <>
             <Nav cart={cart} setCart={setCart}/>
-            <Cart num={20} products={products} cart={cart} setCart={setCart}/>
+            <Cart num={50} products={products} cart={cart} setCart={setCart}/>
             <Footer />
         </>
     );

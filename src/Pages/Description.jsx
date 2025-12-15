@@ -17,7 +17,7 @@ export default function Description({cart, setCart}) {
     useEffect(() => {
         let mounted = true;
 
-        fetch(`https://api.escuelajs.co/api/v1/products/${id}`)
+        fetch(`https://api-com.up.railway.app/api/clothes/${id}`)
             .then(res => res.json())
             .then(data => {
                 if (!mounted) return;
@@ -50,7 +50,7 @@ export default function Description({cart, setCart}) {
 
             <div className="desc-container">
                 <div className="desc-image-box">
-                    <img src={product.images?.[0]} alt={product.title} className="desc-img" />
+                    <img src={product.image} alt={product.title} className="desc-img" />
                 </div>
 
                 <div className="desc-content">
@@ -64,7 +64,7 @@ export default function Description({cart, setCart}) {
                         </div>
 
                         <div className="mobile-header-right">
-                            <p className="desc-price">${product.price}</p>
+                            <p className="desc-price">{product.price}</p>
                         </div>
                     </div>
 
@@ -98,7 +98,7 @@ export default function Description({cart, setCart}) {
                 </div>
 
                 <div className="details-box">
-                    <p><strong>Category:</strong> {product.category?.name}</p>
+                    <p><strong>Category:</strong> {product.category}</p>
                     <p><strong>Stock:</strong> In Stock</p>
                     <p><strong>Material:</strong> Premium Fabric</p>
                 </div>

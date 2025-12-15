@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../css/search.css";
 
-function Search({ setSrch}) {
+function Search({ setSrch }) {
     const [query, setQuery] = useState("");
     const [products, setProducts] = useState([]);
+    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 const res = await fetch(
-                    "https://api.escuelajs.co/api/v1/categories/1/products"
+                    "https://api-rbso.onrender.com/api/clothes/"
                 );
                 const data = await res.json();
                 setProducts(data);
@@ -18,13 +20,13 @@ function Search({ setSrch}) {
             }
         };
         fetchProducts();
-        // fetch('https://fakestoreapi.com/products')
-        //     .then(res => res.json())
-        //     .then(data => setProducts(data))
     }, []);
-    const results = products.filter((item) =>
-        item.title.toLowerCase().includes(query.toLowerCase())
-    );
+    const normalizedQuery = query.toLowerCase().trim();
+    const results = products.filter((item) => {
+        const words = item.title.toLowerCase().split(/\s+/);
+        return words.some(word => word.startsWith(normalizedQuery));
+    });
+
 
     return (
         <>
@@ -50,10 +52,16 @@ function Search({ setSrch}) {
                     ) : (
                         results.map((item) => (
                             <div className="search-item" key={item.id}>
-                                <img src={item.images} alt={item.title} />
+                                <img onClick={() => {
+                                    navigate(`/clothes/${item.id}`);
+                                    setSrch(false);
+                                }} src={item.image} alt={item.title} />
                                 <div>
-                                    <p className="s-title">{item.title}</p>
-                                    <p className="s-price">${item.price}</p>
+                                    <p onClick={() => {
+                                        navigate(`/clothes/${item.id}`);
+                                        setSrch(false);
+                                    }} className="s-title">{item.title}</p>
+                                    <p className="s-price">{item.price}</p>
                                 </div>
                             </div>
                         ))

@@ -14,7 +14,7 @@ function App() {
         const fetchProducts = async () => {
             try {
                 const res = await fetch(
-                    "https://api.escuelajs.co/api/v1/categories/1/products"
+                    "https://api-com.up.railway.app/api/clothes"
                 );
                 const data = await res.json();
                 setProducts(data);
@@ -32,7 +32,7 @@ function App() {
             <Route path="/" element={<Home products={products} cart={cart} setCart={setCart} />} />
             <Route path="/Shop" element={<Shop products={products} cart={cart} setCart={setCart} />} />
             <Route path="/Contact" element={<Contact />} />
-            <Route path="/product/:id" element={<Description cart={cart} setCart={setCart} />} />
+            <Route path="/clothes/:id" element={<Description cart={cart} setCart={setCart} />} />
             <Route path="*" element={<Notfound />} />
         </Routes>
     );

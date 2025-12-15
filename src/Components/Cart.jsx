@@ -14,16 +14,16 @@ function Cart({ num, products, cart, setCart }) {
                 {products.slice(0, num).map(item => (
                     <div className="cart-card" key={item.id}>
                         <div className='cart-image'>
-                            <img onClick={() => navigate(`/product/${item.id}`)} className='pop-img' src={item.images} alt={item.title} onError={(e) => {
+                            <img onClick={() => navigate(`/clothes/${item.id}`)} className='pop-img' src={item.image} alt={item.title} onError={(e) => {
                                 e.target.style.display = "none";
                                 e.target.parentNode.classList.add("skeleton-box");
                             }} />
                         </div>
                         <div className='cart-info'>
-                            <p onClick={() => navigate(`/product/${item.id}`)} className='product-name'>{item.title}</p>
+                            <p onClick={() => navigate(`/clothes/${item.id}`)} className='product-name'>{item.title}</p>
 
                             <div className='cart-btn'>
-                                <p className='product-price'>${item.price}</p>
+                                <p className='product-price'>{item.price}</p>
                                 <button
                                     className="add-btn"
                                     onClick={() => {

@@ -57,7 +57,6 @@
     gap: 15px;
     padding: 10px 0;
     border-bottom: 1px solid #f3f3f3;
-    cursor: pointer;
 }
 
 .search-item img {
@@ -65,9 +64,11 @@
     height: 60px;
     border-radius: 8px;
     object-fit: cover;
+    cursor: pointer;
 }
 
 .s-title {
+    cursor: pointer;
     font-size: 16px;
     font-weight: 500;
 }

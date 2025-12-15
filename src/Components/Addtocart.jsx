@@ -26,12 +26,12 @@ function Addtocart({ setOpencart, cart, setCart }) {
                             {safeCart.map((item) => (
                                 <div className="cart-card" id='cart-card' key={item.id}>
                                     <div className='cart-image'>
-                                        <img onClick={() => navigate(`/product/${item.id}`)} className='pop-img' src={item.images} alt={item.title} />
+                                        <img onClick={() => navigate(`/clothes/${item.id}`)} className='pop-img' src={item.image} alt={item.title} />
                                     </div>
                                     <div className='cart-info'>
-                                        <p className='product-name' onClick={() => navigate(`/product/${item.id}`)}>{item.title}</p>
+                                        <p className='product-name' onClick={() => navigate(`/clothes/${item.id}`)}>{item.title}</p>
                                         <div className='cart-btn'>
-                                            <p className='product-price ' id='add-pri'>${item.price}</p>
+                                            <p className='product-price ' id='add-pri'>{item.price}</p>
                                             <button className='add-btn' id='add-btn'>Order</button>
                                         </div>
                                         <button
