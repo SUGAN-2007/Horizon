@@ -33,6 +33,7 @@
     height: 240px;
     border-radius: 2px;
     cursor: pointer;
+    object-fit: contain;
 }
 
 .cart-info {
@@ -207,14 +208,13 @@ hr {
     }
 }
 
-@media (max-width : 400px) {
+@media (max-width : 480px) {
     .cart-image img {
-        height: 160px;
+        height: 180px;
+        object-fit: contain;
     }
-    
+
     .skeleton-box {
-        height: 160px;
+        height: 180px;
     }
 }
-
-
