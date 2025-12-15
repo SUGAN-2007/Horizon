@@ -150,7 +150,6 @@
     }
 }
 
-/* <= 768px (Tablet / Phone landscape) */
 @media (max-width: 768px) {
     .desc-container {
         flex-direction: column;

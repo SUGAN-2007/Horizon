@@ -1,31 +1,19 @@
-import { useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/search.css";
 
-function Search({ setSrch }) {
+function Search({ setSrch, products = [] }) {
     const [query, setQuery] = useState("");
-    const [products, setProducts] = useState([]);
     const navigate = useNavigate()
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const res = await fetch(
-                    "https://api-com.up.railway.app/api/clothes"
-                );
-                const data = await res.json();
-                setProducts(data);
-            } catch (error) {
-                console.error("Error fetching products:", error);
-            }
-        };
-        fetchProducts();
-    }, []);
     const normalizedQuery = query.toLowerCase().trim();
-    const results = products.filter((item) => {
-        const words = item.title.toLowerCase().split(/\s+/);
-        return words.some(word => word.startsWith(normalizedQuery));
-    });
+    const results = useMemo(() => {
+        if (!normalizedQuery) return [];
+        return products.filter((item) => {
+            const words = item.title.toLowerCase().split(/\s+/);
+            return words.some(word => word.startsWith(normalizedQuery));
+        });
+    }, [products, normalizedQuery]);
 
 
     return (

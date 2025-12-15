@@ -4,7 +4,7 @@ import Login from './Login';
 import Addtocart from './Addtocart';
 import Search from './Search';
 import '../css/Nav.css';
-function Nav({ cart, setCart }) {
+function Nav({ cart, setCart, products }) {
     const [pro, setPro] = useState(false);
     const [opencart, setOpencart] = useState(false);
     const [srch, setSrch] = useState(false)
@@ -36,7 +36,7 @@ function Nav({ cart, setCart }) {
             </nav>
             {pro && <Login />}
             {opencart && <Addtocart opencart={opencart} setOpencart={setOpencart} cart={cart} setCart={setCart} />}
-            {srch && <Search setSrch={setSrch} />}
+            {srch && <Search setSrch={setSrch} products={products} />}
 
         </>
     );

@@ -5,7 +5,7 @@ import Poster from "../Components/Poster";
 function Home({products,cart,setCart}) {
   return (
     <div>
-      <Nav cart={cart} setCart={setCart}/>
+      <Nav cart={cart} setCart={setCart} products={products}/>
       <Poster />
       <Popular products={products} cart={cart} setCart={setCart}/>
       <Footer />
