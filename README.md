@@ -1,4 +1,4 @@
-# Horizon - E-Commerce Website
+# Horizon E-Commerce Website
 
 A modern, responsive e-commerce website built with React. Horizon is a forward-driven clothing brand platform featuring a clean, modern design with seamless shopping experience.
 
