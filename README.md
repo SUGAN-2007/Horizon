@@ -23,23 +23,23 @@ A modern, responsive e-commerce website built with React. Horizon is a forward-d
 
 ```
 src/
-├── Components/      # Reusable React components
-│   ├── Nav.jsx      # Navigation bar
-│   ├── Cart.jsx     # Product cart component
-│   ├── Search.jsx   # Search functionality
-│   ├── Footer.jsx   # Footer component
+├── Components/      
+│   ├── Nav.jsx    
+│   ├── Cart.jsx     
+│   ├── Search.jsx  
+│   ├── Footer.jsx   
 │   └── ...
-├── Pages/           # Page components
-│   ├── Home.jsx     # Home page
-│   ├── Shop.jsx     # Shop page
-│   ├── Contact.jsx  # Contact page
+├── Pages/           
+│   ├── Home.jsx     
+│   ├── Shop.jsx     
+│   ├── Contact.jsx 
 │   └── ...
-├── css/             # Stylesheet files
+├── css/             
 │   ├── App.css
 │   ├── Nav.css
 │   ├── Cart.css
 │   └── ...
-└── App.jsx          # Main application component
+└── App.jsx          
 ```
 
 ## API Integration
