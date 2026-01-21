@@ -17,7 +17,7 @@ export default function Description({cart, setCart}) {
     useEffect(() => {
         let mounted = true;
 
-        fetch(`https://api-com.up.railway.app/api/clothes/${id}`)
+        fetch(`https://api-u88j.onrender.com/api/clothes/${id}`)
             .then(res => res.json())
             .then(data => {
                 if (!mounted) return;

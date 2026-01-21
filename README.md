@@ -45,7 +45,7 @@ src/
 ## API Integration
 
 The project uses the own API for product data:
-- Product listing: `https://api-com.up.railway.app/api/clothes`
+- Product listing: `https://api-u88j.onrender.com/api/clothes`
 - more about api : `https://github.com/SUGAN-2007/Api`
 
 ## Responsive Design

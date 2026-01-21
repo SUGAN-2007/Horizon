@@ -14,7 +14,7 @@ function App() {
         const fetchProducts = async () => {
             try {
                 const res = await fetch(
-                    "https://api-com.up.railway.app/api/clothes"
+                    "https://api-u88j.onrender.com/api/clothes"
                 );
                 const data = await res.json();
                 setProducts(data);
