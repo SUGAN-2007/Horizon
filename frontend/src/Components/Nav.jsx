@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Login from './Login';
 import Addtocart from './Addtocart';
@@ -8,6 +8,21 @@ function Nav({ cart, setCart, products }) {
     const [pro, setPro] = useState(false);
     const [opencart, setOpencart] = useState(false);
     const [srch, setSrch] = useState(false)
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === "Escape") {
+                setSrch(false);
+                setPro(false);
+                setOpencart(false);
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+    }, []);
     return (
         <>
             <nav className="nav">

@@ -23,7 +23,7 @@ function Cart({ num, products, cart, setCart }) {
                             <p onClick={() => navigate(`/clothes/${item.id}`)} className='product-name'>{item.title}</p>
 
                             <div className='cart-btn'>
-                                <p className='product-price'>{item.price}</p>
+                                <p className='product-price'>₹{item.price}</p>
                                 <button
                                     className="add-btn"
                                     onClick={() => {

@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/search.css";
 
-function Search({ setSrch, products = [] }) {
+function Search({ setSrch, products }) {
     const [query, setQuery] = useState("");
     const navigate = useNavigate()
 
@@ -19,7 +19,6 @@ function Search({ setSrch, products = [] }) {
     return (
         <>
             <div className="search-overlay" onClick={() => setSrch(false)} />
-
             <div className="search-box">
                 <div className="search-head">
                     <input
@@ -29,7 +28,7 @@ function Search({ setSrch, products = [] }) {
                         onChange={(e) => setQuery(e.target.value)}
                         autoFocus
                     />
-                    <button className="close-btn" onClick={() => setSrch(false)}>×</button>
+                    <button className="close-btn" onClick={() => setSrch(false)} >×</button>
                 </div>
 
                 <div className="results">
@@ -49,7 +48,7 @@ function Search({ setSrch, products = [] }) {
                                         navigate(`/clothes/${item.id}`);
                                         setSrch(false);
                                     }} className="s-title">{item.title}</p>
-                                    <p className="s-price">{item.price}</p>
+                                    <p className="s-price">₹{item.price}</p>
                                 </div>
                             </div>
                         ))

@@ -14,7 +14,7 @@ function App() {
         const fetchProducts = async () => {
             try {
                 const res = await fetch(
-                    "https://api-u88j.onrender.com/api/clothes"
+                    "http://localhost:5000/api/products/"
                 );
                 const data = await res.json();
                 setProducts(data);
@@ -29,7 +29,7 @@ function App() {
             <Route path="/" element={<Home products={products} cart={cart} setCart={setCart} />} />
             <Route path="/Shop" element={<Shop products={products} cart={cart} setCart={setCart} />} />
             <Route path="/Contact" element={<Contact />} />
-            <Route path="/clothes/:id" element={<Description cart={cart} setCart={setCart} />} />
+            <Route path="/clothes/:id" element={<Description products={products} cart={cart} setCart={setCart} />} />
             <Route path="*" element={<Notfound />} />
         </Routes>
     );
