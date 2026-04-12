@@ -1,14 +1,15 @@
-
 import Nav from "../Components/Nav";
-import Cart from "../Components/Cart";
+import ProductGrid from "../Components/ProductGrid";
 import Footer from "../Components/Footer";
-function Shop({products,cart,setCart}) {
+
+function Shop({ products }) {
     return (
         <>
-            <Nav cart={cart} setCart={setCart} products={products}/>
-            <Cart num={60} products={products} cart={cart} setCart={setCart}/>
+            <Nav products={products} />
+            <ProductGrid num={60} products={products} />
             <Footer />
         </>
     );
 }
+
 export default Shop;

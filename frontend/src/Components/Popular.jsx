@@ -1,12 +1,11 @@
-import Cart from './Cart';
-import '../css/Cart.css'
+import ProductGrid from './ProductGrid';
+import '../css/ProductGrid.css'
 
-function Popular({ products , cart, setCart }) {
-
+function Popular({ products }) {
     return (
         <>
-           <p className="fea-pro">Featured products</p>
-            <Cart num={10} products={products.filter((products) => products.category === 'feature')} cart={cart}  setCart={setCart}/>
+            <p className="fea-pro">Featured products</p>
+            <ProductGrid num={10} products={products.filter((product) => product.category === 'feature')} />
         </>
     );
 }

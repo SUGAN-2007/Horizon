@@ -43,12 +43,7 @@ router.get("/", verifyUser, async (req, res) => {
       id,
       quantity,
       size,
-      products (
-        id,
-        name,
-        price,
-        image_url
-      )
+      products (*)
     `)
     .eq("user_id", req.user.id);
 
@@ -56,6 +51,33 @@ router.get("/", verifyUser, async (req, res) => {
     return res.status(500).json({ error });
 
   res.json(data);
+});
+
+router.delete("/remove/:id", verifyUser, async (req, res) => {
+  const { error } = await supabase
+    .from("cart")
+    .delete()
+    .eq("id", req.params.id)
+    .eq("user_id", req.user.id);
+
+  if (error)
+    return res.status(500).json({ error });
+
+  res.json({ message: "Removed from cart" });
+});
+
+router.put("/update/:id", verifyUser, async (req, res) => {
+  const { quantity } = req.body;
+  const { error } = await supabase
+    .from("cart")
+    .update({ quantity })
+    .eq("id", req.params.id)
+    .eq("user_id", req.user.id);
+
+  if (error)
+    return res.status(500).json({ error });
+
+  res.json({ message: "Cart updated" });
 });
 
 export default router;

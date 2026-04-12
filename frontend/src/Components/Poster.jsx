@@ -7,7 +7,7 @@ function Poster() {
             <h1 className='pos-head'>Redefine Your Style. <br></br>Own the <span>Horizon</span>.</h1>
             <p className='pos-des'>Horizon is a forward-driven clothing brand built for people who don’t settle. Clean, modern, and trend-aware pieces that feel fresh today and stay relevant tomorrow.</p>
 
-        </div>  
+        </div>
     )
 }
 export default Poster;

@@ -1,11 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import '../css/Cart.css';
+import { useCart } from '../context/CartContext';
+import { useUser } from '../context/UserContext';
+import '../css/ProductGrid.css';
 import Toast from './toast';
 
-function Cart({ num, products, cart, setCart }) {
+function ProductGrid({ num, products }) {
     const navigate = useNavigate();
     const [toast, setToast] = useState(false);
+    const { addToCart } = useCart();
+    const { user, setShowLogin } = useUser();
 
     const fillers = Math.max(0, num - products.length);
     return (
@@ -21,38 +25,29 @@ function Cart({ num, products, cart, setCart }) {
                         </div>
                         <div className='cart-info'>
                             <p onClick={() => navigate(`/clothes/${item.id}`)} className='product-name'>{item.title}</p>
-
                             <div className='cart-btn'>
                                 <p className='product-price'>₹{item.price}</p>
                                 <button
-                                    className="add-btn"
+                                    className={`add-btn ${!user ? 'guest-btn' : ''}`}
                                     onClick={() => {
-                                        setCart([...cart, item]);
+                                        if (!user) {
+                                            setShowLogin(true);
+                                            return;
+                                        }
+                                        addToCart(item, "M"); // Default size M for now from quick add
                                         setToast(true);
                                         setTimeout(() => setToast(false), 1000);
                                     }}
                                 >
                                     Add to cart
                                 </button>
-
                             </div>
                         </div>
                     </div>
                 ))}
-                {Array.from({ length: fillers }).map((_, i) => (
-                    <div className="cart-card" key={`placeholder-${i}`}>
-                        <div className="popular-image skeleton-box"></div>
-
-                        <div className="cart-info">
-                            <p className="product-name">Coming Soon</p>
-                            <p className="product-price uploading">Uploading…</p>
-                        </div>
-                    </div>
-                ))}
             </div >
-            {toast && <Toast message={"Added to cart Successfully"} />
-            }
+            {toast && <Toast message={"Added to cart Successfully"} />}
         </>
     )
 }
-export default Cart;
+export default ProductGrid;

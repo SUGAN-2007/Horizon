@@ -1,20 +1,32 @@
 :root {
     --mont: 'Montserrat', sans-serif;
     --inter: 'Inter', sans-serif;
-    --beb : 'Bebas Neue', cursive;
+    --beb: 'Bebas Neue', cursive;
 }
-*{
+
+html,
+body,
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+body {
     overflow-x: hidden;
 }
-a,button{
+
+a,
+button {
     cursor: pointer;
 }
-a,link{
+
+a,
+link {
     text-decoration: none;
 }
-p{
+
+p {
     cursor: default;
     user-select: none;
 }

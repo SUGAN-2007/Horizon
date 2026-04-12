@@ -103,7 +103,17 @@
     font-weight: 600;
     cursor: pointer;
     margin-bottom: 20px;
-    border: none;
+    border: 2px solid #000;
+    transition: all 0.2s ease;
+}
+
+.add-cart-btn.guest-btn {
+    background: transparent;
+    color: #000;
+}
+
+.add-cart-btn.guest-btn:hover {
+    background: #f0f0f0;
 }
 
 .details-box strong {

@@ -1,8 +1,9 @@
 .nav {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 0px 40px;
-    height: 8dvb;
+    height: 70px;
 }
 
 .nav-head {
@@ -50,7 +51,8 @@
     .nav-contact {
         font-size: 2dvb;
     }
-    .nav-img{
+
+    .nav-img {
         gap: 3dvb;
     }
 
@@ -59,6 +61,7 @@
         height: 4dvb;
     }
 }
+
 @media(max-width : 900px) {
     .nav-head {
         gap: 1.5dvb;
@@ -71,9 +74,10 @@
     .nav-shop,
     .nav-contact {
         font-size: 1.8dvb;
-        margin: 9px 0 0 0 ;
+        margin: 9px 0 0 0;
     }
-    .nav-img{
+
+    .nav-img {
         gap: 2dvb;
     }
 
