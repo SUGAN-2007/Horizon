@@ -6,6 +6,7 @@ import Notfound from "./Pages/Notfound";
 import Description from "./Pages/Description";
 import Contact from "./Pages/Contact";
 import Profile from "./Pages/Profile";
+import Checkout from "./Pages/Checkout";
 import { useUser } from "./context/UserContext";
 import './css/App.css'
 
@@ -35,6 +36,7 @@ function App() {
             <Route path="/Contact" element={<Contact />} />
             <Route path="/Profile" element={user ? <Profile products={products} /> : <ProtectedRoute user={user} setShowLogin={setShowLogin} />} />
             <Route path="/clothes/:id" element={<Description products={products} />} />
+            <Route path="/checkout" element={<Checkout />} />
             {isAdmin && user && <Route path="/Admin" element={<div>Admin Page Template</div>} />}
             <Route path="*" element={<Notfound />} />
         </Routes>

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Nav from "../Components/Nav";
-import Footer from "../Components/Footer";
 import "../css/Contact.css";
 import Toast from "../Components/toast";
 
@@ -57,7 +56,6 @@ function Contact() {
                     <button type="submit" className="submit-btn">Submit</button>
                 </form>
             </div>
-            <Footer/>
         </>
     );
 }

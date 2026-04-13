@@ -158,7 +158,6 @@ function Profile({ products }) {
                         )}
                     </div>
                 </div>
-                <Footer />
             </div>
         </>
     );

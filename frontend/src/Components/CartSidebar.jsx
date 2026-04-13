@@ -3,20 +3,14 @@ import { useCart } from '../context/CartContext';
 import '../css/CartSidebar.css';
 
 function Addtocart({ setOpencart }) {
-    const { cart, removeFromCart, updateQuantity, placeOrder } = useCart();
+    const { cart, removeFromCart, updateQuantity, placeOrder, calculateTotal } = useCart();
     const navigate = useNavigate();
 
-    const handleCheckout = async () => {
-        const order = await placeOrder();
-        if (order) {
-            alert("Order placed successfully!");
-            setOpencart(false);
-        }
+    const handleCheckout = () => {
+        setOpencart(false);
+        navigate('/checkout');
     };
 
-    const calculateTotal = () => {
-        return cart.reduce((total, item) => total + (item.price * (item.quantity || 1)), 0);
-    };
 
     return (
         <div className="cart-in">

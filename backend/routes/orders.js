@@ -6,8 +6,10 @@ const router = express.Router();
 
 // 1. Place an Order
 router.post("/place", verifyUser, async (req, res) => {
+    const { address, phone, paymentMethod } = req.body;
+
     try {
-        const { data: cartItems, error: cartError } = await supabase
+        const { data: cartItems, error: cartError } = await req.supabase
             .from("cart")
             .select("*, products(price)")
             .eq("user_id", req.user.id);
@@ -16,9 +18,15 @@ router.post("/place", verifyUser, async (req, res) => {
 
         const totalPrice = cartItems.reduce((acc, item) => acc + (item.products.price * item.quantity), 0);
 
-        const { data: order, error: orderError } = await supabase
+        const { data: order, error: orderError } = await req.supabase
             .from("orders")
-            .insert([{ user_id: req.user.id, total_price: totalPrice }])
+            .insert([{
+                user_id: req.user.id,
+                total_price: totalPrice,
+                address,
+                phone,
+                payment_method: paymentMethod || 'COD'
+            }])
             .select().single();
 
         if (orderError) throw orderError;
@@ -31,8 +39,8 @@ router.post("/place", verifyUser, async (req, res) => {
             price_at_order: item.products.price
         }));
 
-        await supabase.from("order_items").insert(orderItemsData);
-        await supabase.from("cart").delete().eq("user_id", req.user.id);
+        await req.supabase.from("order_items").insert(orderItemsData);
+        await req.supabase.from("cart").delete().eq("user_id", req.user.id);
 
         res.json({ message: "Order placed successfully", orderId: order.id });
     } catch (error) {

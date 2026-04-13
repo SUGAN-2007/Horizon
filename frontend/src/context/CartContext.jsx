@@ -38,9 +38,9 @@ export const CartProvider = ({ children }) => {
         }
     }, [user, session]);
 
-    const addToCart = async (product, size) => {
+    const addToCart = async (product, size, quantity = 1) => {
         if (!user) {
-            setCart(prev => [...prev, { ...product, size, quantity: 1 }]);
+            setCart(prev => [...prev, { ...product, size, quantity }]);
             return;
         }
         try {
@@ -50,7 +50,7 @@ export const CartProvider = ({ children }) => {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${session.access_token}`,
                 },
-                body: JSON.stringify({ productId: product.id, size }),
+                body: JSON.stringify({ productId: product.id, size, quantity }),
             });
             if (res.ok) fetchCart();
         } catch (error) {
@@ -98,14 +98,16 @@ export const CartProvider = ({ children }) => {
     };
 
 
-    const placeOrder = async () => {
+    const placeOrder = async (orderData) => {
         if (!user || cart.length === 0) return;
         try {
             const res = await fetch("http://localhost:5000/api/orders/place", {
                 method: "POST",
                 headers: {
+                    "Content-Type": "application/json",
                     Authorization: `Bearer ${session.access_token}`,
                 },
+                body: JSON.stringify(orderData)
             });
             if (res.ok) {
                 const data = await res.json();
@@ -117,8 +119,12 @@ export const CartProvider = ({ children }) => {
         }
     };
 
+    const calculateTotal = () => {
+        return cart.reduce((total, item) => total + (item.price * (item.quantity || 1)), 0);
+    };
+
     return (
-        <CartContext.Provider value={{ cart, setCart, fetchCart, addToCart, removeFromCart, updateQuantity, placeOrder }}>
+        <CartContext.Provider value={{ cart, setCart, fetchCart, addToCart, removeFromCart, updateQuantity, placeOrder, calculateTotal }}>
             {children}
         </CartContext.Provider>
     );
