@@ -24,7 +24,7 @@ function ProductUpload() {
         setMessage('');
 
         try {
-            const res = await fetch("http://localhost:5000/api/products/add", {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/add`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

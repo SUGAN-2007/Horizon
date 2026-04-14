@@ -37,6 +37,13 @@
 .nav-img img {
     width: 4.6dvb;
     height: 4.9dvb;
+    cursor: pointer;
+}
+
+.nav-delivery {
+    width: 4.6dvb !important;
+    height: 4.9dvb !important;
+    object-fit: contain;
 }
 
 @media(max-width : 1024px) {
@@ -119,5 +126,9 @@
     .nav-img img {
         width: 20px;
         height: 20px;
+    }
+
+    .nav-icon-svg {
+        width: 20px;
     }
 }

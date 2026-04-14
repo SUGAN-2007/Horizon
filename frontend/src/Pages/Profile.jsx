@@ -6,7 +6,7 @@ import { supabase } from '../lib/supabase';
 import '../css/Profile.css';
 
 function Profile({ products }) {
-    const { user, profile, isAdmin, logout } = useUser();
+    const { user, profile, logout } = useUser();
     const [fullName, setFullName] = useState('');
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
@@ -14,7 +14,6 @@ function Profile({ products }) {
     const [updating, setUpdating] = useState(false);
     const [message, setMessage] = useState('');
 
-    // Update local state when profile/user data is loaded
     useEffect(() => {
         if (profile) {
             setFullName(profile.full_name || '');
@@ -25,6 +24,7 @@ function Profile({ products }) {
             setEmail(user.email || '');
         }
     }, [profile, user]);
+
     const handleUpdate = async (e) => {
         e.preventDefault();
         setUpdating(true);
@@ -62,7 +62,7 @@ function Profile({ products }) {
                     <div className="profile-header">
                         <div className="profile-header-info">
                             <h2>My Profile</h2>
-                            <p>Welcome back, {profile?.full_name || 'User'}</p>
+                            <p>Manage your account settings</p>
                         </div>
                     </div>
 
@@ -115,9 +115,6 @@ function Profile({ products }) {
                                             onChange={(e) => setEmail(e.target.value)}
                                             placeholder="Email Address"
                                         />
-                                        <p style={{ fontSize: '12px', color: '#999', marginTop: '4px' }}>
-                                            Verification required after change.
-                                        </p>
                                     </div>
                                 </div>
                             </div>

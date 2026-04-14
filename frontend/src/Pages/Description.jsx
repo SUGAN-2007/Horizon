@@ -46,7 +46,7 @@ export default function Description({ products }) {
 
     const fetchReviews = async () => {
         try {
-            const url = `http://localhost:5000/api/reviews/${id}`;
+            const url = `${import.meta.env.VITE_API_URL}/api/reviews/${id}`;
             const res = await fetch(url);
             const data = await res.json();
             setReviews(Array.isArray(data) ? data : []);
@@ -59,14 +59,18 @@ export default function Description({ products }) {
 
     const isInCart = cart.some(item => item.id === product.id && item.size === selectedSize);
 
-    const handleAddToCart = () => {
+    const handleAction = () => {
         if (!user) {
             setShowLogin(true);
             return;
         }
-        addToCart(product, selectedSize, quantity);
-        setToast(true);
-        setTimeout(() => setToast(false), 2000);
+        if (isInCart) {
+            navigate('/checkout');
+        } else {
+            addToCart(product, selectedSize, quantity);
+            setToast(true);
+            setTimeout(() => setToast(false), 2000);
+        }
     };
 
     const updateQuantity = (val) => {
@@ -91,7 +95,7 @@ export default function Description({ products }) {
 
         setSubmitting(true);
         try {
-            const res = await fetch("http://localhost:5000/api/reviews/add", {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/reviews/add`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -204,7 +208,7 @@ export default function Description({ products }) {
                         </div>
                     </div>
 
-                    <button className="add-to-cart-btn" onClick={handleAddToCart}>
+                    <button className="add-to-cart-btn" onClick={handleAction}>
                         {isInCart ? 'Place Order' : `Add to Cart — ₹${product.price * quantity}`}
                     </button>
 
@@ -313,7 +317,7 @@ function ReviewItem({ rev, user, session, refresh, timeAgo }) {
 
     const fetchReplies = async () => {
         try {
-            const res = await fetch(`http://localhost:5000/api/reviews/replies/${rev.id}`);
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/reviews/replies/${rev.id}`);
             const data = await res.json();
             setReplies(Array.isArray(data) ? data : []);
         } catch (err) { console.error(err); }
@@ -324,7 +328,7 @@ function ReviewItem({ rev, user, session, refresh, timeAgo }) {
         e.preventDefault();
         if (!user) return alert("Please login to reply");
         try {
-            const res = await fetch("http://localhost:5000/api/reviews/reply/add", {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/reviews/reply/add`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

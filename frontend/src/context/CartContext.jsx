@@ -10,7 +10,7 @@ export const CartProvider = ({ children }) => {
     const fetchCart = async () => {
         if (!session) return;
         try {
-            const res = await fetch("http://localhost:5000/api/cart/", {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/cart/`, {
                 headers: {
                     Authorization: `Bearer ${session.access_token}`,
                 },
@@ -44,7 +44,7 @@ export const CartProvider = ({ children }) => {
             return;
         }
         try {
-            const res = await fetch("http://localhost:5000/api/cart/add", {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/cart/add`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -64,7 +64,7 @@ export const CartProvider = ({ children }) => {
             return;
         }
         try {
-            const res = await fetch(`http://localhost:5000/api/cart/remove/${cartItemId}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/cart/remove/${cartItemId}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${session.access_token}`,
@@ -83,7 +83,7 @@ export const CartProvider = ({ children }) => {
             return;
         }
         try {
-            const res = await fetch(`http://localhost:5000/api/cart/update/${cartItemId}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/cart/update/${cartItemId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -101,7 +101,7 @@ export const CartProvider = ({ children }) => {
     const placeOrder = async (orderData) => {
         if (!user || cart.length === 0) return;
         try {
-            const res = await fetch("http://localhost:5000/api/orders/place", {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/place`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

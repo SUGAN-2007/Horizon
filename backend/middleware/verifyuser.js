@@ -25,6 +25,7 @@ export const verifyUser = async (req, res, next) => {
   if (error)
     return res.status(401).json({ error: "Invalid token" });
 
+  console.log(`[AUTH] User: ${data.user.email} (ID: ${data.user.id})`);
   req.user = data.user;
   req.supabase = personatedSupabase; // Attach the personated client
   next();

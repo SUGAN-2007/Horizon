@@ -50,38 +50,66 @@ router.post("/place", verifyUser, async (req, res) => {
 
 // 2. [Admin Only] Get all orders
 router.get("/all", verifyAdmin, async (req, res) => {
-    console.log("Admin Orders Request Received for user:", req.user?.id);
     try {
         const { data, error } = await req.supabase
             .from("orders")
-            .select("*")
+            .select(`
+                *,
+                profiles (full_name, phone),
+                order_items (
+                    id, quantity, size, price_at_order,
+                    products (title, image)
+                )
+            `)
             .order('created_at', { ascending: false });
 
-        if (error) {
-            console.error("Supabase Admin Orders Error:", error);
-            return res.status(500).json({ error: error.message });
-        }
-        console.log("Admin Orders Data found:", data?.length);
+        if (error) throw error;
         res.json(data);
     } catch (err) {
-        console.error("Server Admin Orders Error:", err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 4. [Admin Only] Update Order Status
+router.put("/status/:orderId", verifyAdmin, async (req, res) => {
+    const { status } = req.body;
+    const { orderId } = req.params;
+    console.log(`Setting order ${orderId} status to: ${status}`);
+    try {
+        // Use the global supabase client (Service Role) to bypass RLS for admin updates
+        const { data, error } = await supabase
+            .from("orders")
+            .update({ status })
+            .eq("id", orderId)
+            .select();
+
+        if (error) throw error;
+        console.log("Update success:", data);
+        res.json({ message: "Status updated", data });
+    } catch (err) {
+        console.error("Update fail:", err.message);
         res.status(500).json({ error: err.message });
     }
 });
 
 // 3. User Order History
 router.get("/", verifyUser, async (req, res) => {
-    const { data, error } = await supabase
-        .from("orders")
-        .select(`
-      id, total_price, status, created_at,
-      order_items (id, quantity, size, price_at_order, products (title, image))
-    `)
-        .eq("user_id", req.user.id)
-        .order('created_at', { ascending: false });
+    try {
+        const { data, error } = await req.supabase
+            .from("orders")
+            .select(`
+          id, total_price, status, created_at,
+          order_items (id, quantity, size, price_at_order, products (title, image))
+        `)
+            .eq("user_id", req.user.id)
+            .order('created_at', { ascending: false });
 
-    if (error) return res.status(500).json({ error });
-    res.json(data);
+        if (error) throw error;
+        res.json(data);
+    } catch (error) {
+        console.error("Order fetch error:", error.message);
+        res.status(500).json({ error: error.message });
+    }
 });
 
 export default router;

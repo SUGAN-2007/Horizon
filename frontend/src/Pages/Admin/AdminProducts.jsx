@@ -14,7 +14,7 @@ function AdminProducts() {
 
     const fetchProducts = async () => {
         try {
-            const res = await fetch("http://localhost:5000/api/products/");
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/`);
             const data = await res.json();
             setProducts(data);
         } catch (error) {
@@ -31,7 +31,7 @@ function AdminProducts() {
     const handleDelete = async (id) => {
         if (!window.confirm("Are you sure you want to delete this product?")) return;
         try {
-            const res = await fetch(`http://localhost:5000/api/products/${id}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/${id}`, {
                 method: "DELETE",
                 headers: { Authorization: `Bearer ${session.access_token}` },
             });
@@ -44,7 +44,7 @@ function AdminProducts() {
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch(`http://localhost:5000/api/products/${editingProduct.id}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/${editingProduct.id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

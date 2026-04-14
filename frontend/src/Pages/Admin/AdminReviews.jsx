@@ -8,7 +8,7 @@ function AdminReviews() {
 
     const fetchReviews = async () => {
         try {
-            const res = await fetch("http://localhost:5000/api/reviews/admin/all", {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/reviews/admin/all`, {
                 headers: { Authorization: `Bearer ${session.access_token}` }
             });
             const data = await res.json();
@@ -27,7 +27,7 @@ function AdminReviews() {
     const handleDelete = async (id) => {
         if (!window.confirm("Delete this review?")) return;
         try {
-            const res = await fetch(`http://localhost:5000/api/reviews/admin/${id}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/reviews/admin/${id}`, {
                 method: "DELETE",
                 headers: { Authorization: `Bearer ${session.access_token}` }
             });

@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Login from './Login';
 import Addtocart from './CartSidebar';
 import Search from './Search';
+import OrderTracker from './OrderTracker';
 import { useCart } from '../context/CartContext';
 import { useUser } from '../context/UserContext';
 import '../css/Nav.css';
 
 function Nav({ products }) {
     const navigate = useNavigate();
+    const location = useLocation();
     const [opencart, setOpencart] = useState(false);
-    const [srch, setSrch] = useState(false)
+    const [srch, setSrch] = useState(false);
+    const [showTracker, setShowTracker] = useState(false);
     const { cart } = useCart();
     const { user, showLogin, setShowLogin, isAdmin } = useUser();
 
@@ -20,11 +23,20 @@ function Nav({ products }) {
                 setSrch(false);
                 setShowLogin(false);
                 setOpencart(false);
+                setShowTracker(false);
             }
         };
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [setShowLogin]);
+
+    // Close all overlays on route change
+    useEffect(() => {
+        setSrch(false);
+        setShowLogin(false);
+        setOpencart(false);
+        setShowTracker(false);
+    }, [location.pathname]);
 
     const handleProfileClick = () => {
         if (!user) {
@@ -47,9 +59,18 @@ function Nav({ products }) {
                     {isAdmin && <Link to="/Admin" className="nav-admin">Admin</Link>}
                 </div>
                 <div className='nav-img'>
+                    <a title="Track Order" onClick={() => {
+                        if (!user) { setShowLogin(true); return; }
+                        setShowTracker(true);
+                        setSrch(false);
+                        setOpencart(false);
+                    }}>
+                        <img className='nav-delivery' src="/nav/delievery.png" alt="Track" />
+                    </a>
                     <a onClick={() => {
                         setSrch(true);
-                        setShowLogin(false)
+                        setShowLogin(false);
+                        setShowTracker(false);
                     }}><img src="/nav/search.png" alt="" /></a>
                     <a onClick={() => {
                         if (!user) {
@@ -74,6 +95,7 @@ function Nav({ products }) {
             {showLogin && <Login />}
             {opencart && <Addtocart opencart={opencart} setOpencart={setOpencart} />}
             {srch && <Search setSrch={setSrch} products={products} />}
+            {showTracker && <OrderTracker isOpen={showTracker} onClose={() => setShowTracker(false)} />}
         </>
     );
 }
