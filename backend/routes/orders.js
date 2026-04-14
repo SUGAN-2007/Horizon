@@ -50,17 +50,23 @@ router.post("/place", verifyUser, async (req, res) => {
 
 // 2. [Admin Only] Get all orders
 router.get("/all", verifyAdmin, async (req, res) => {
-    const { data, error } = await supabase
-        .from("orders")
-        .select(`
-      id, total_price, status, user_id, created_at,
-      profiles (full_name),
-      order_items (id, quantity, size, price_at_order, products (title, image))
-    `)
-        .order('created_at', { ascending: false });
+    console.log("Admin Orders Request Received for user:", req.user?.id);
+    try {
+        const { data, error } = await req.supabase
+            .from("orders")
+            .select("*")
+            .order('created_at', { ascending: false });
 
-    if (error) return res.status(500).json({ error: error.message });
-    res.json(data);
+        if (error) {
+            console.error("Supabase Admin Orders Error:", error);
+            return res.status(500).json({ error: error.message });
+        }
+        console.log("Admin Orders Data found:", data?.length);
+        res.json(data);
+    } catch (err) {
+        console.error("Server Admin Orders Error:", err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // 3. User Order History

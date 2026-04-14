@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useUser } from '../context/UserContext';
 import Nav from '../Components/Nav';
 import Footer from '../Components/Footer';
@@ -64,7 +64,6 @@ function Profile({ products }) {
                             <h2>My Profile</h2>
                             <p>Welcome back, {profile?.full_name || 'User'}</p>
                         </div>
-                        {isAdmin && <span className="admin-badge">🛡️ Administrator</span>}
                     </div>
 
                     <div className="profile-body">
@@ -146,19 +145,10 @@ function Profile({ products }) {
                                 </button>
                             </div>
                         </form>
-
-                        {isAdmin && (
-                            <button
-                                className='btn-save'
-                                style={{ marginTop: '20px', background: '#3b82f6' }}
-                                onClick={() => window.location.href = '/Admin'}
-                            >
-                                Open Admin Dashboard
-                            </button>
-                        )}
                     </div>
                 </div>
             </div>
+            <Footer />
         </>
     );
 }

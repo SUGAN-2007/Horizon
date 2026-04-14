@@ -7,6 +7,7 @@ import Description from "./Pages/Description";
 import Contact from "./Pages/Contact";
 import Profile from "./Pages/Profile";
 import Checkout from "./Pages/Checkout";
+import AdminDashboard from "./Pages/Admin/AdminDashboard";
 import { useUser } from "./context/UserContext";
 import './css/App.css'
 
@@ -37,7 +38,7 @@ function App() {
             <Route path="/Profile" element={user ? <Profile products={products} /> : <ProtectedRoute user={user} setShowLogin={setShowLogin} />} />
             <Route path="/clothes/:id" element={<Description products={products} />} />
             <Route path="/checkout" element={<Checkout />} />
-            {isAdmin && user && <Route path="/Admin" element={<div>Admin Page Template</div>} />}
+            <Route path="/Admin" element={isAdmin && user ? <AdminDashboard /> : <Navigate to="/" />} />
             <Route path="*" element={<Notfound />} />
         </Routes>
     );

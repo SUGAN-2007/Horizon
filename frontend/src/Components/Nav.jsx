@@ -12,7 +12,7 @@ function Nav({ products }) {
     const [opencart, setOpencart] = useState(false);
     const [srch, setSrch] = useState(false)
     const { cart } = useCart();
-    const { user, showLogin, setShowLogin } = useUser();
+    const { user, showLogin, setShowLogin, isAdmin } = useUser();
 
     useEffect(() => {
         const handleKeyDown = (e) => {
@@ -44,6 +44,7 @@ function Nav({ products }) {
                     <Link to="/" className="nav-header">Horizon</Link>
                     <Link to="/Shop" className="nav-shop">Shop</Link>
                     <Link to="/Contact" className="nav-contact">Contact</Link>
+                    {isAdmin && <Link to="/Admin" className="nav-admin">Admin</Link>}
                 </div>
                 <div className='nav-img'>
                     <a onClick={() => {

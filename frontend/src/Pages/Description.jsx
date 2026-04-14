@@ -24,13 +24,30 @@ export default function Description({ products }) {
     const [ratingTouched, setRatingTouched] = useState(false);
     const [submitting, setSubmitting] = useState(false);
 
+    // Helper for relative time
+    const timeAgo = (date) => {
+        const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+        let interval = seconds / 31536000;
+        if (interval > 1) return Math.floor(interval) + " years ago";
+        interval = seconds / 2592000;
+        if (interval > 1) return Math.floor(interval) + " months ago";
+        interval = seconds / 86400;
+        if (interval > 1) return Math.floor(interval) + " days ago";
+        interval = seconds / 3600;
+        if (interval > 1) return Math.floor(interval) + " hours ago";
+        interval = seconds / 60;
+        if (interval > 1) return Math.floor(interval) + " minutes ago";
+        return Math.floor(seconds) + " seconds ago";
+    };
+
     useEffect(() => {
         if (id) fetchReviews();
-    }, [id]);
+    }, [id, user]);
 
     const fetchReviews = async () => {
         try {
-            const res = await fetch(`http://localhost:5000/api/reviews/${id}`);
+            const url = `http://localhost:5000/api/reviews/${id}`;
+            const res = await fetch(url);
             const data = await res.json();
             setReviews(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -122,8 +139,35 @@ export default function Description({ products }) {
         <>
             <Nav products={products} />
             <div className="desc-container">
-                <div className="desc-image-box">
-                    <img src={product.image} alt={product.title} className="desc-img" />
+                <div className="desc-left">
+                    <div className="desc-image-box">
+                        <img src={product.image} alt={product.title} className="desc-img" />
+                    </div>
+
+                    <div className="detailed-rating-section-left">
+                        <h3 className="section-title">Ratings & Breakdown</h3>
+                        <div className="rating-overview">
+                            <div className="rating-score-box">
+                                <span className="big-rating">{averageRating}</span>
+                                <div className="stars-mini">
+                                    {"★".repeat(Math.round(parseFloat(averageRating)))}
+                                    {"☆".repeat(5 - Math.round(parseFloat(averageRating)))}
+                                </div>
+                                <span className="total-reviews">{reviews.length} reviews</span>
+                            </div>
+                            <div className="rating-bars">
+                                {breakdownData.map((item) => (
+                                    <div className="rating-bar-row" key={item.stars}>
+                                        <span className="star-label">{item.stars} Star</span>
+                                        <div className="bar-bg">
+                                            <div className="bar-fill" style={{ width: `${item.pct}%` }}></div>
+                                        </div>
+                                        <span className="pct-label">{item.pct}%</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="desc-content">
@@ -160,103 +204,94 @@ export default function Description({ products }) {
                         </div>
                     </div>
 
-                    <div className="des-add-cart">
-                        <button
-                            className={`add-cart-btn ${!user ? 'guest-btn' : ''} ${isInCart ? 'checkout-btn' : ''}`}
-                            onClick={isInCart ? () => navigate('/checkout') : handleAddToCart}
-                        >
-                            {isInCart ? 'Place Order' : 'Add to Cart'}
-                        </button>
-                    </div>
+                    <button className="add-to-cart-btn" onClick={handleAddToCart}>
+                        {isInCart ? 'Place Order' : `Add to Cart — ₹${product.price * quantity}`}
+                    </button>
 
-                    <div className="details-box">
-                        <p><strong>Category:</strong> {product.category}</p>
-                        <p><strong>Stock:</strong> In Stock</p>
-                        <p><strong>Material:</strong> Premium Fabric</p>
-                    </div>
-
-                    <p className="desc-text">{product.description}</p>
-
-                    <div className="detailed-rating-section">
-                        <h3 className="rating-heading">Customer Ratings</h3>
-                        <div className="rating-overview">
-                            <div className="rating-score-box">
-                                <span className="big-rating">{averageRating}</span>
-                                <div className="stars-mini">
-                                    {"★".repeat(Math.round(parseFloat(averageRating)))}
-                                    {"☆".repeat(5 - Math.round(parseFloat(averageRating)))}
-                                </div>
-                                <span className="total-reviews">{reviews.length} reviews</span>
-                            </div>
-                            <div className="rating-bars">
-                                {breakdownData.map((item) => (
-                                    <div className="rating-bar-row" key={item.stars}>
-                                        <span className="star-label">{item.stars} Star</span>
-                                        <div className="bar-bg">
-                                            <div className="bar-fill" style={{ width: `${item.pct}%` }}></div>
-                                        </div>
-                                        <span className="pct-label">{item.pct}%</span>
-                                    </div>
-                                ))}
-                            </div>
+                    <div className="product-specs">
+                        <div className="spec-row">
+                            <span className="spec-label">AVAILABILITY</span>
+                            <span className="spec-value stock-status">
+                                <span className="pulse-dot"></span> In Stock
+                            </span>
+                        </div>
+                        <div className="spec-row">
+                            <span className="spec-label">COLLECTION</span>
+                            <span className="spec-value">{product.category || 'Premium Feature'}</span>
+                        </div>
+                        <div className="spec-row">
+                            <span className="spec-label">MATERIAL</span>
+                            <span className="spec-value">{product.material || 'Premium Fabric'}</span>
                         </div>
                     </div>
 
-                    {/* Review Section */}
-                    <div className="reviews-section">
-                        <h1 className="rating-heading">Customer Reviews</h1>
+                    <div className="desc-separator"></div>
+                    <p className="desc-text-premium">{product.description}</p>
+                </div>
+            </div>
 
-                        {user ? (
-                            <form className="review-form" onSubmit={handleSubmitReview}>
-                                <div className="rating-input">
-                                    {[1, 2, 3, 4, 5].map(star => (
-                                        <span
-                                            key={star}
-                                            className={`star-icon ${newRating >= star ? 'active' : ''}`}
-                                            onClick={() => {
-                                                setNewRating(star);
-                                                setRatingTouched(true);
-                                            }}
-                                        >
-                                            ★
-                                        </span>
+            <div className="product-footer-section">
+                <div className="footer-flex-container">
+                    <div className="footer-left-col">
+                        <div className="review-submission-box-wide">
+                            <h3 className="section-title">Leave Feedback</h3>
+                            {user ? (
+                                <form className="review-form-simple" onSubmit={handleSubmitReview}>
+                                    <div className="rating-input-line">
+                                        {[1, 2, 3, 4, 5].map(star => (
+                                            <span
+                                                key={star}
+                                                className={`star-icon-bw ${newRating >= star ? 'active' : ''}`}
+                                                onClick={() => {
+                                                    setNewRating(star);
+                                                    setRatingTouched(true);
+                                                }}
+                                            >
+                                                ★
+                                            </span>
+                                        ))}
+                                    </div>
+                                    <textarea
+                                        placeholder="Write your thoughts..."
+                                        value={newComment}
+                                        onChange={(e) => setNewComment(e.target.value)}
+                                        required
+                                    />
+                                    <button type="submit" className="post-btn-bw" disabled={submitting}>
+                                        {submitting ? 'Posting...' : 'Submit Review'}
+                                    </button>
+                                </form>
+                            ) : (
+                                <div className="login-prompt-simple">
+                                    <p>Please <span onClick={() => setShowLogin(true)}>Login</span> to review.</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="footer-right-col">
+                        <div className="reviews-list-compact">
+                            <h3 className="section-title">Customer Comments</h3>
+                            {reviews.length > 0 ? (
+                                <div className="reviews-stack">
+                                    {reviews.map(rev => (
+                                        <ReviewItem
+                                            key={rev.id}
+                                            rev={rev}
+                                            user={user}
+                                            session={session}
+                                            refresh={fetchReviews}
+                                            timeAgo={timeAgo}
+                                        />
                                     ))}
                                 </div>
-                                <textarea
-                                    placeholder="Share your experience with this product..."
-                                    value={newComment}
-                                    onChange={(e) => setNewComment(e.target.value)}
-                                    required
-                                />
-                                <button type="submit" disabled={submitting}>
-                                    {submitting ? 'Submitting...' : 'Post Review'}
-                                </button>
-                            </form>
-                        ) : (
-                            <div className="login-to-review">
-                                <p>Please <span onClick={() => setShowLogin(true)}>Login</span> to post a review.</p>
-                            </div>
-                        )}
-
-                        <div className="reviews-list">
-                            {reviews.length > 0 ? (
-                                reviews.map(rev => (
-                                    <div className="review-card" key={rev.id}>
-                                        <div className="review-header">
-                                            <span className="review-user">{rev.profiles?.full_name || 'Verified User'}</span>
-                                            <div className="review-stars">{"★".repeat(rev.rating)}{"☆".repeat(5 - rev.rating)}</div>
-                                        </div>
-                                        <p className="review-comment">{rev.comment}</p>
-                                        <span className="review-date">{new Date(rev.created_at).toLocaleDateString()}</span>
-                                    </div>
-                                ))
                             ) : (
-                                <p className="no-reviews">No reviews yet. Be the first to share your thoughts!</p>
+                                <p className="no-reviews-simple">No comments yet. Be the first.</p>
                             )}
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
 
             {toast && (
                 <div className="toast-fixed">
@@ -264,6 +299,115 @@ export default function Description({ products }) {
                     <span>Added to Cart</span>
                 </div>
             )}
+            <Footer />
         </>
+    );
+}
+
+// Inner Component for Interactive Reviews
+function ReviewItem({ rev, user, session, refresh, timeAgo }) {
+    const [showReplies, setShowReplies] = useState(false);
+    const [replies, setReplies] = useState([]);
+    const [replyText, setReplyText] = useState("");
+    const [isReplying, setIsReplying] = useState(false);
+
+    const fetchReplies = async () => {
+        try {
+            const res = await fetch(`http://localhost:5000/api/reviews/replies/${rev.id}`);
+            const data = await res.json();
+            setReplies(Array.isArray(data) ? data : []);
+        } catch (err) { console.error(err); }
+    };
+
+
+    const handleReply = async (e) => {
+        e.preventDefault();
+        if (!user) return alert("Please login to reply");
+        try {
+            const res = await fetch("http://localhost:5000/api/reviews/reply/add", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${session.access_token}`,
+                },
+                body: JSON.stringify({ reviewId: rev.id, comment: replyText }),
+            });
+            if (res.ok) {
+                setReplyText("");
+                setIsReplying(false);
+                fetchReplies();
+                setShowReplies(true);
+            }
+        } catch (err) { console.error(err); }
+    };
+
+    return (
+        <div className="review-card-clean">
+            <div className="review-card-top">
+                <div className="review-user-info">
+                    <span className="review-user-name">{rev.name}</span>
+                    <span className="review-rating-num">({rev.rating}/5)</span>
+                    <span className="review-stars-inline">
+                        {"★".repeat(rev.rating)}{"☆".repeat(5 - rev.rating)}
+                    </span>
+                    <span className="review-date-relative">{timeAgo(rev.created_at)}</span>
+                </div>
+            </div>
+
+            <p className="review-text-simple">{rev.comment}</p>
+
+            <div className="review-actions">
+                <button className="act-btn-txt" onClick={() => setIsReplying(!isReplying)}>Reply</button>
+
+                {rev.reply_count > 0 && !showReplies && (
+                    <button className="view-replies-count-btn" onClick={() => {
+                        fetchReplies();
+                        setShowReplies(true);
+                    }}>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m19 9-7 7-7-7" /></svg>
+                        {rev.reply_count} {rev.reply_count === 1 ? 'Reply' : 'Replies'}
+                    </button>
+                )}
+            </div>
+
+            {isReplying && (
+                <form className="reply-form-mini" onSubmit={handleReply}>
+                    <input
+                        type="text"
+                        placeholder="Add a reply..."
+                        value={replyText}
+                        onChange={(e) => setReplyText(e.target.value)}
+                        autoFocus
+                        required
+                    />
+                    <div className="reply-form-btns">
+                        <button type="button" className="cancel-reply" onClick={() => setIsReplying(false)}>Cancel</button>
+                        <button type="submit" className="post-reply-btn">Reply</button>
+                    </div>
+                </form>
+            )}
+
+            {showReplies && (
+                <div className="replies-list-container">
+                    <div className="replies-list">
+                        {replies.map(rep => (
+                            <div key={rep.id} className="reply-item">
+                                <div className="reply-header">
+                                    <span className="reply-user">{rep.name} </span>
+                                    <span className="reply-at">{timeAgo(rep.created_at)}</span>
+                                </div>
+                                <span className="reply-body">{rep.comment}</span>
+                            </div>
+                        ))}
+                    </div>
+                    {replies.length > 0 && (
+                        <button className="hide-replies-btn" onClick={() => setShowReplies(false)}>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m18 15-6-6-6 6" /></svg>
+                            Hide Replies
+                        </button>
+                    )}
+                </div>
+            )}
+        </div>
     );
 }

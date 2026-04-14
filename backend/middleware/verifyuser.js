@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { supabase } from "../supabaseClient.js";
 
 export const verifyUser = async (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
@@ -7,9 +8,9 @@ export const verifyUser = async (req, res, next) => {
     return res.status(401).json({ error: "No token provided" });
 
   // Create a per-request client with the user's JWT
-  const supabase = createClient(
+  const personatedSupabase = createClient(
     process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY, // This should be service_role, but token makes it act as user
+    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY,
     {
       global: {
         headers: {
@@ -19,13 +20,13 @@ export const verifyUser = async (req, res, next) => {
     }
   );
 
-  const { data, error } = await supabase.auth.getUser();
+  const { data, error } = await personatedSupabase.auth.getUser();
 
   if (error)
     return res.status(401).json({ error: "Invalid token" });
 
   req.user = data.user;
-  req.supabase = supabase; // Attach the personated client
+  req.supabase = personatedSupabase; // Attach the personated client
   next();
 };
 
@@ -35,19 +36,35 @@ export const verifyAdmin = async (req, res, next) => {
   if (!token)
     return res.status(401).json({ error: "No token provided" });
 
-  const { data, error } = await supabase.auth.getUser(token);
+  // Create a personated client for the admin request
+  const personatedSupabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY,
+    {
+      global: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    }
+  );
+
+  const { data, error } = await personatedSupabase.auth.getUser();
   if (error) return res.status(401).json({ error: "Invalid token" });
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await personatedSupabase
     .from('profiles')
     .select('role')
     .eq('id', data.user.id)
     .single();
 
-  if (profile?.role !== 'admin') {
+  if (profileError || profile?.role !== 'admin') {
+    console.warn("Admin Verify Failed for user:", data.user?.id, "Error:", profileError?.message);
     return res.status(403).json({ error: "Access denied. Admin role required." });
   }
 
+  console.log("Admin Verify Success for user:", data.user?.id);
   req.user = data.user;
+  req.supabase = personatedSupabase;
   next();
 };
