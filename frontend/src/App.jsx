@@ -9,6 +9,7 @@ import Profile from "./Pages/Profile";
 import Checkout from "./Pages/Checkout";
 import AdminDashboard from "./Pages/Admin/AdminDashboard";
 import { useUser } from "./context/UserContext";
+import ScrollToTop from "./Components/ScrollToTop";
 import './css/App.css'
 
 function App() {
@@ -31,16 +32,19 @@ function App() {
     if (loading) return null;
 
     return (
-        <Routes>
-            <Route path="/" element={<Home products={products} />} />
-            <Route path="/Shop" element={<Shop products={products} />} />
-            <Route path="/Contact" element={<Contact />} />
-            <Route path="/Profile" element={user ? <Profile products={products} /> : <ProtectedRoute user={user} setShowLogin={setShowLogin} />} />
-            <Route path="/clothes/:id" element={<Description products={products} />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/Admin" element={isAdmin && user ? <AdminDashboard /> : <Navigate to="/" />} />
-            <Route path="*" element={<Notfound />} />
-        </Routes>
+        <>
+            <ScrollToTop />
+            <Routes>
+                <Route path="/" element={<Home products={products} />} />
+                <Route path="/Shop" element={<Shop products={products} />} />
+                <Route path="/Contact" element={<Contact />} />
+                <Route path="/Profile" element={user ? <Profile products={products} /> : <ProtectedRoute user={user} setShowLogin={setShowLogin} />} />
+                <Route path="/clothes/:id" element={<Description products={products} />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/Admin" element={isAdmin && user ? <AdminDashboard /> : <Navigate to="/" />} />
+                <Route path="*" element={<Notfound />} />
+            </Routes>
+        </>
     );
 }
 

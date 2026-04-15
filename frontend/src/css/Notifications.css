@@ -1,0 +1,189 @@
+.notif-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.notif-modal-content {
+    background: white;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    animation: zoomIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.9) translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+.notif-modal-header {
+    padding: 24px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.notif-modal-header h2 {
+    font-family: var(--mont);
+    font-size: 22px;
+    font-weight: 800;
+    margin: 0;
+}
+
+.notif-close-btn {
+    background: none;
+    border: none;
+    font-size: 32px;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.notif-close-btn:hover {
+    color: #333;
+}
+
+.notif-modal-tabs {
+    padding: 15px 32px;
+    display: flex;
+    gap: 10px;
+    background: #fafafa;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.notif-tab-btn {
+    padding: 8px 18px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    border: none;
+    background: none;
+    color: #888;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.notif-tab-btn.active {
+    background: white;
+    color: #111;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.notif-modal-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.notif-modal-item {
+    display: flex;
+    gap: 20px;
+    padding: 20px 32px;
+    border-bottom: 1px solid #f9f9f9;
+    cursor: pointer;
+    transition: background 0.2s;
+    position: relative;
+}
+
+.notif-modal-item:hover {
+    background: #fcfcfc;
+}
+
+.notif-modal-icon {
+    width: 44px;
+    height: 44px;
+    background: #f2f2f2;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.notif-modal-info {
+    flex: 1;
+}
+
+.notif-modal-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #111;
+    margin: 0 0 4px 0;
+}
+
+.notif-modal-subtitle {
+    font-size: 13px;
+    color: #666;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.unread-dot-modal {
+    width: 8px;
+    height: 8px;
+    background: #0066ff;
+    border-radius: 50%;
+    position: absolute;
+    right: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.notif-modal-footer {
+    padding: 20px 32px;
+    text-align: right;
+    background: white;
+}
+
+.mark-read-modal {
+    background: none;
+    border: none;
+    color: #0066ff;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.mark-read-modal:hover {
+    text-decoration: underline;
+}
+
+/* Scrollbar Style */
+.notif-modal-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.notif-modal-list::-webkit-scrollbar-thumb {
+    background: #eee;
+    border-radius: 10px;
+}

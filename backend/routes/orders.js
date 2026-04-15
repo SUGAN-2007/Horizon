@@ -1,6 +1,7 @@
 import express from "express";
 import { supabase } from "../supabaseClient.js";
 import { verifyUser, verifyAdmin } from "../middleware/verifyuser.js";
+import { sendOrderEmail } from "../utils/mailer.js";
 
 const router = express.Router();
 
@@ -40,7 +41,17 @@ router.post("/place", verifyUser, async (req, res) => {
         }));
 
         await req.supabase.from("order_items").insert(orderItemsData);
+
+        // Fetch items with product details for email
+        const { data: fullItems } = await req.supabase
+            .from("order_items")
+            .select("*, products(title)")
+            .eq("order_id", order.id);
+
         await req.supabase.from("cart").delete().eq("user_id", req.user.id);
+
+        // Send Email (Non-blocking)
+        sendOrderEmail(order, req.user, fullItems || []);
 
         res.json({ message: "Order placed successfully", orderId: order.id });
     } catch (error) {
