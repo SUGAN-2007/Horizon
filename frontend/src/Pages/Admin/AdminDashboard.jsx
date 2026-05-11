@@ -6,11 +6,13 @@ import AdminOrders from './AdminOrders';
 import ProductUpload from './ProductUpload';
 import AdminProducts from './AdminProducts';
 import AdminReviews from './AdminReviews';
+import AdminStats from './AdminStats';
+import AdminDiscounts from './AdminDiscounts';
 import '../../css/Admin.css';
 
 function AdminDashboard() {
     const { isAdmin, user } = useUser();
-    const [activeTab, setActiveTab] = useState('orders');
+    const [activeTab, setActiveTab] = useState('dashboard');
 
     if (!isAdmin || !user) {
         return (
@@ -29,6 +31,12 @@ function AdminDashboard() {
                     <h3>MANAGEMENT</h3>
                     <nav>
                         <button
+                            className={activeTab === 'dashboard' ? 'active' : ''}
+                            onClick={() => setActiveTab('dashboard')}
+                        >
+                            Overview
+                        </button>
+                        <button
                             className={activeTab === 'orders' ? 'active' : ''}
                             onClick={() => setActiveTab('orders')}
                         >
@@ -39,6 +47,12 @@ function AdminDashboard() {
                             onClick={() => setActiveTab('products')}
                         >
                             Products
+                        </button>
+                        <button
+                            className={activeTab === 'discounts' ? 'active' : ''}
+                            onClick={() => setActiveTab('discounts')}
+                        >
+                            Discounts
                         </button>
                         <button
                             className={activeTab === 'upload' ? 'active' : ''}
@@ -55,8 +69,10 @@ function AdminDashboard() {
                     </nav>
                 </aside>
                 <main className="admin-content">
+                    {activeTab === 'dashboard' && <AdminStats />}
                     {activeTab === 'orders' && <AdminOrders />}
                     {activeTab === 'products' && <AdminProducts />}
+                    {activeTab === 'discounts' && <AdminDiscounts />}
                     {activeTab === 'upload' && <ProductUpload />}
                     {activeTab === 'reviews' && <AdminReviews />}
                 </main>

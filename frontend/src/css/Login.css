@@ -158,6 +158,90 @@
     font-weight: 500;
 }
 
+
+/* Password field with toggle */
+.password-group {
+    position: relative;
+}
+
+.password-group .pop-input {
+    padding-right: 52px;
+}
+
+.toggle-pw-btn {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #999;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+    width: auto !important;
+    margin: 0 !important;
+}
+
+.toggle-pw-btn:hover {
+    color: #333;
+}
+
+/* Forgot password link */
+.pop-forgot {
+    text-align: right;
+    font-size: 13px;
+    color: #666;
+    margin: -10px 0 16px;
+    cursor: pointer;
+    font-family: var(--inter);
+    transition: color 0.2s;
+}
+
+.pop-forgot:hover {
+    color: #000;
+    text-decoration: underline;
+}
+
+/* Success message */
+.inline-success {
+    color: #16a34a;
+    font-size: 13px;
+    margin: 0 0 14px 4px;
+    font-family: var(--inter);
+    font-weight: 500;
+    background: #f0fdf4;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #bbf7d0;
+}
+
+/* Hint text under title */
+.form-hint {
+    font-size: 14px;
+    color: #888;
+    margin: -8px 0 20px;
+    font-family: var(--inter);
+}
+
+/* User avatar circle */
+.pop-avatar {
+    width: 60px;
+    height: 60px;
+    background: #000;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 24px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-family: var(--inter);
+}
+
 @media (max-width: 600px) {
     .popup-box {
         padding: 20px;

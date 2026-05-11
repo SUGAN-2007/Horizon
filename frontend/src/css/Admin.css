@@ -269,3 +269,99 @@
     font-size: 0.875rem;
     color: var(--admin-text-muted);
 }
+
+/* Stats Styling */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.stat-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.stat-icon.revenue {
+    background: #ecfdf5;
+    color: #10b981;
+}
+
+.stat-icon.orders {
+    background: #eff6ff;
+    color: #3b82f6;
+}
+
+.stat-icon.products {
+    background: #fff7ed;
+    color: #f59e0b;
+}
+
+.stat-icon.reviews {
+    background: #fdf2f8;
+    color: #db2777;
+}
+
+.stat-info .stat-label {
+    display: block;
+    color: #64748b;
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+}
+
+.stat-info .stat-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.revenue-breakdown {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    line-height: 1.6;
+}
+
+.revenue-breakdown h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+.revenue-breakdown p {
+    color: #475569;
+    font-size: 1rem;
+    max-width: 800px;
+}
+
+.stats-loading {
+    padding: 100px;
+    text-align: center;
+    color: #64748b;
+    font-style: italic;
+}

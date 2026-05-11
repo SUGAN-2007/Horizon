@@ -180,7 +180,40 @@ export default function Description({ products }) {
                             <h1 className="desc-title">{product.title}</h1>
                         </div>
                         <div className="mobile-header-right">
-                            <p className="desc-price">₹{product.price}</p>
+                            <div className="price-stack">
+                                {(() => {
+                                    const isDiscountActive = product.discount_percent > 0 &&
+                                        (!product.discount_until || new Date(product.discount_until) > new Date());
+
+                                    const getTimeLeft = () => {
+                                        if (!product.discount_until || !isDiscountActive) return null;
+                                        const diff = new Date(product.discount_until) - new Date();
+                                        const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+                                        if (days === 1) return "Ends tomorrow";
+                                        if (days === 0) return "Ends today";
+                                        if (days <= 7) return `Ends in ${days} days`;
+                                        return null;
+                                    };
+
+                                    const timeLeft = getTimeLeft();
+
+                                    return (
+                                        <>
+                                            {isDiscountActive && (
+                                                <>
+                                                    <span className="desc-original-price">₹{product.price}</span>
+                                                    {timeLeft && <span style={{ color: '#ef4444', fontSize: '11px', fontWeight: 'bold' }}>{timeLeft}</span>}
+                                                </>
+                                            )}
+                                            <p className="desc-price">
+                                                ₹{isDiscountActive
+                                                    ? Math.floor(product.price * (1 - product.discount_percent / 100))
+                                                    : product.price}
+                                            </p>
+                                        </>
+                                    );
+                                })()}
+                            </div>
                         </div>
                     </div>
 
@@ -209,7 +242,7 @@ export default function Description({ products }) {
                     </div>
 
                     <button className="add-to-cart-btn" onClick={handleAction}>
-                        {isInCart ? 'Place Order' : `Add to Cart — ₹${product.price * quantity}`}
+                        {isInCart ? 'Place Order' : `Add to Cart — ₹${Math.floor((product.discount_percent > 0 ? product.price * (1 - product.discount_percent / 100) : product.price) * quantity)}`}
                     </button>
 
                     <div className="product-specs">

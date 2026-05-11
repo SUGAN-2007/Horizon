@@ -15,7 +15,40 @@ body,
 body {
     overflow-x: hidden;
     padding-top: 70px;
+    background-color: #ffffff;
+    color: #1a1a1a;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #000;
+}
+
+/* Global Transitions */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+button {
+    font-family: var(--inter);
+    letter-spacing: 0.5px;
+}
+
 
 @media (max-width: 600px) {
     body {
@@ -36,4 +69,28 @@ link {
 p {
     cursor: default;
     user-select: none;
+    line-height: 1.6;
+}
+
+/* Premium Buttons */
+.btn-premium {
+    background: #000;
+    color: #fff;
+    padding: 12px 24px;
+    border: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-premium:hover {
+    background: #333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-premium:active {
+    transform: translateY(0);
 }

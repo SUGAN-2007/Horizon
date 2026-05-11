@@ -65,10 +65,8 @@ function Footer() {
                     <p>@ 2025 Horizon</p>
                 </div>
                 <div className='socials'>
-                    <img src="/footer/face.png" alt="" />
-                    <img src="/footer/insta.png" alt="" />
-                    <img src="/footer/x.png" alt="" />
-                    <img src="/footer/mes.png" alt="" />
+                    <a href="https://www.instagram.com/horizon_e_com" target="_blank" rel="noopener noreferrer"><img src="/footer/insta.png" alt="" /></a>
+                    <a href="https://x.com/horizon_ecom" target="_blank" rel="noopener noreferrer"><img src="/footer/x.png" alt="" /></a>
                 </div>
             </footer>
             {showToast && <Toast message={"Joined Successfully."} />}

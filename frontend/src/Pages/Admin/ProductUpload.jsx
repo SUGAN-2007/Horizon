@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { useUser } from '../../context/UserContext';
+import { supabase } from '../../lib/supabase';
 
 function ProductUpload() {
-    const { session } = useUser();
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
     const [product, setProduct] = useState({
@@ -10,49 +9,35 @@ function ProductUpload() {
         description: '',
         category: 'Men',
         price: '',
+        discount_percent: 0,
         image: '',
         sizes: 'S, M, L, XL'
     });
 
-    const handleChange = (e) => {
-        setProduct({ ...product, [e.target.name]: e.target.value });
-    };
+    const handleChange = (e) => setProduct({ ...product, [e.target.name]: e.target.value });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setMessage('');
 
-        try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/add`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${session.access_token}`,
-                },
-                body: JSON.stringify(product),
-            });
+        const { error } = await supabase.from('products').insert([{
+            title: product.title,
+            description: product.description,
+            category: product.category,
+            price: parseFloat(product.price),
+            discount_percent: parseInt(product.discount_percent) || 0,
+            image: product.image,
+            sizes: product.sizes.split(',').map(s => s.trim()),
+        }]);
 
-            const data = await res.json();
-            if (res.ok) {
-                setMessage('Product added successfully!');
-                setProduct({
-                    title: '',
-                    description: '',
-                    category: 'Men',
-                    price: '',
-                    image: '',
-                    sizes: 'S, M, L, XL'
-                });
-            } else {
-                setMessage('Error: ' + data.error);
-            }
-        } catch (error) {
-            setMessage('Failed to upload product');
-            console.error(error);
-        } finally {
-            setLoading(false);
+        if (!error) {
+            setMessage('✅ Product added successfully!');
+            setProduct({ title: '', description: '', category: 'Men', price: '', discount_percent: 0, image: '', sizes: 'S, M, L, XL' });
+        } else {
+            setMessage('❌ Error: ' + error.message);
         }
+        setLoading(false);
     };
 
     return (
@@ -70,7 +55,7 @@ function ProductUpload() {
                         <label>Description</label>
                         <textarea name="description" value={product.description} onChange={handleChange} required placeholder="Product details..." />
                     </div>
-                    <div className="form-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                    <div className="form-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '15px' }}>
                         <div className="form-group">
                             <label>Category</label>
                             <select name="category" value={product.category} onChange={handleChange}>
@@ -82,6 +67,10 @@ function ProductUpload() {
                         <div className="form-group">
                             <label>Price (₹)</label>
                             <input type="number" name="price" value={product.price} onChange={handleChange} required placeholder="999" />
+                        </div>
+                        <div className="form-group">
+                            <label>Discount (%)</label>
+                            <input type="number" name="discount_percent" value={product.discount_percent} onChange={handleChange} placeholder="0" min="0" max="100" />
                         </div>
                     </div>
                     <div className="form-group">

@@ -12,9 +12,15 @@ function AdminReviews() {
                 headers: { Authorization: `Bearer ${session.access_token}` }
             });
             const data = await res.json();
-            setReviews(data);
+            if (Array.isArray(data)) {
+                setReviews(data);
+            } else {
+                console.error("Invalid reviews data:", data);
+                setReviews([]);
+            }
         } catch (error) {
-            console.error("Error fetching reviews:", error);
+            console.error('Error fetching reviews:', error);
+            setReviews([]);
         } finally {
             setLoading(false);
         }

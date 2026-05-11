@@ -1,94 +1,57 @@
 import { useState, useEffect } from 'react';
-import { useUser } from '../../context/UserContext';
+import { supabase } from '../../lib/supabase';
 
 function AdminProducts() {
-    const { session } = useUser();
     const [products, setProducts] = useState([]);
     const [editingProduct, setEditingProduct] = useState(null);
     const [loading, setLoading] = useState(true);
-
-    // Filter/Sort States
     const [searchTerm, setSearchTerm] = useState('');
     const [sortBy, setSortBy] = useState('newest');
     const [limit, setLimit] = useState(10);
 
     const fetchProducts = async () => {
-        try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/`);
-            const data = await res.json();
-            setProducts(data);
-        } catch (error) {
-            console.error("Error fetching products:", error);
-        } finally {
-            setLoading(false);
-        }
+        const { data } = await supabase.from('products').select('*');
+        setProducts(data || []);
+        setLoading(false);
     };
 
-    useEffect(() => {
-        fetchProducts();
-    }, []);
+    useEffect(() => { fetchProducts(); }, []);
 
     const handleDelete = async (id) => {
-        if (!window.confirm("Are you sure you want to delete this product?")) return;
-        try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/${id}`, {
-                method: "DELETE",
-                headers: { Authorization: `Bearer ${session.access_token}` },
-            });
-            if (res.ok) fetchProducts();
-        } catch (error) {
-            console.error(error);
-        }
+        if (!window.confirm('Are you sure you want to delete this product?')) return;
+        await supabase.from('products').delete().eq('id', id);
+        fetchProducts();
     };
 
     const handleUpdate = async (e) => {
         e.preventDefault();
-        try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/${editingProduct.id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${session.access_token}`,
-                },
-                body: JSON.stringify(editingProduct),
-            });
-            if (res.ok) {
-                setEditingProduct(null);
-                fetchProducts();
-            }
-        } catch (error) {
-            console.error(error);
-        }
+        await supabase.from('products').update({
+            title: editingProduct.title,
+            price: editingProduct.price,
+            discount_percent: parseInt(editingProduct.discount_percent) || 0,
+            image: editingProduct.image,
+            description: editingProduct.description,
+            category: editingProduct.category,
+        }).eq('id', editingProduct.id);
+        setEditingProduct(null);
+        fetchProducts();
     };
 
-    // Logic for Filtering and Sorting
     const filteredProducts = products.filter(p => {
         const term = searchTerm.toLowerCase();
         if (!term) return true;
-
-        const title = p.title.toLowerCase();
-        const titleWords = title.split(' ');
-        const cat = p.category.toLowerCase();
-
-        // Check if title or any word in title STARTS with the term
-        const startsWithMatch = title.startsWith(term) || titleWords.some(word => word.startsWith(term));
-
-        // Check if title INCLUDES the term (for partial matches)
-        const includeMatch = title.includes(term);
-
-        // Category match: Only match category if the search is at least 2 characters long 
-        // to prevent every item in "womens" showing up for a single "w" query
-        const catMatch = term.length > 1 && cat.startsWith(term);
-
-        return startsWithMatch || includeMatch || catMatch;
+        return p.title?.toLowerCase().includes(term) || p.category?.toLowerCase().includes(term);
     });
 
+    const getDiscountedPrice = (price, discount) => {
+        if (!discount) return price;
+        return price - (price * (discount / 100));
+    };
+
     const sortedProducts = [...filteredProducts].sort((a, b) => {
-        if (sortBy === 'newest') return b.id - a.id;
-        if (sortBy === 'oldest') return a.id - b.id;
         if (sortBy === 'price-high') return b.price - a.price;
         if (sortBy === 'price-low') return a.price - b.price;
-        if (sortBy === 'alphabetical') return a.title.localeCompare(b.title);
+        if (sortBy === 'alphabetical') return a.title?.localeCompare(b.title);
         return 0;
     });
 
@@ -103,29 +66,20 @@ function AdminProducts() {
                 <span>Total: {products.length} Items</span>
             </div>
 
-            {/* Filter Bar */}
             <div className="admin-filters-bar">
                 <div className="filter-search">
                     <span className="search-icon-fixed">🔍</span>
-                    <input
-                        type="text"
-                        placeholder="Search items or categories..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
+                    <input type="text" placeholder="Search items or categories..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                 </div>
-
                 <div className="filter-select-group">
                     <label>Sort By:</label>
                     <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
                         <option value="newest">Newest First</option>
-                        <option value="oldest">Oldest First</option>
                         <option value="price-high">Price: High to Low</option>
                         <option value="price-low">Price: Low to High</option>
                         <option value="alphabetical">Name (A-Z)</option>
                     </select>
                 </div>
-
                 <div className="filter-select-group">
                     <label>Show:</label>
                     <select value={limit} onChange={(e) => setLimit(parseInt(e.target.value))}>
@@ -148,9 +102,15 @@ function AdminProducts() {
                             <label>Product Title</label>
                             <input type="text" value={editingProduct.title} onChange={(e) => setEditingProduct({ ...editingProduct, title: e.target.value })} />
                         </div>
-                        <div className="form-group">
-                            <label>Price (₹)</label>
-                            <input type="number" value={editingProduct.price} onChange={(e) => setEditingProduct({ ...editingProduct, price: e.target.value })} />
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                            <div className="form-group">
+                                <label>Price (₹)</label>
+                                <input type="number" value={editingProduct.price} onChange={(e) => setEditingProduct({ ...editingProduct, price: e.target.value })} />
+                            </div>
+                            <div className="form-group">
+                                <label>Discount (%)</label>
+                                <input type="number" value={editingProduct.discount_percent || 0} onChange={(e) => setEditingProduct({ ...editingProduct, discount_percent: e.target.value })} />
+                            </div>
                         </div>
                         <div className="form-group">
                             <label>Image URL</label>
@@ -169,19 +129,30 @@ function AdminProducts() {
                                     <th>Product Title</th>
                                     <th>Category</th>
                                     <th>Price</th>
+                                    <th>Discount</th>
                                     <th>Stats</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {paginatedProducts.length === 0 ? (
-                                    <tr><td colSpan="6" style={{ textAlign: 'center', padding: '40px' }}>No matches found for "{searchTerm}"</td></tr>
+                                    <tr><td colSpan="7" style={{ textAlign: 'center', padding: '40px' }}>No matches found for "{searchTerm}"</td></tr>
                                 ) : paginatedProducts.map(p => (
                                     <tr key={p.id}>
                                         <td><img src={p.image} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} /></td>
                                         <td><strong>{p.title}</strong></td>
                                         <td>{p.category}</td>
-                                        <td>₹{p.price}</td>
+                                        <td>
+                                            {p.discount_percent > 0 ? (
+                                                <div>
+                                                    <span style={{ textDecoration: 'line-through', color: '#888', fontSize: '0.8rem' }}>₹{p.price}</span>
+                                                    <div style={{ color: '#000', fontWeight: 'bold' }}>₹{getDiscountedPrice(p.price, p.discount_percent).toFixed(0)}</div>
+                                                </div>
+                                            ) : (
+                                                <span>₹{p.price}</span>
+                                            )}
+                                        </td>
+                                        <td><span style={{ color: p.discount_percent > 0 ? '#10b981' : '#888' }}>{p.discount_percent || 0}%</span></td>
                                         <td>Rate: {p.rating_rate} ({p.rating_count})</td>
                                         <td style={{ display: 'flex', gap: '10px' }}>
                                             <button onClick={() => setEditingProduct(p)} style={{ background: '#f1f5f9', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer' }}>Edit</button>

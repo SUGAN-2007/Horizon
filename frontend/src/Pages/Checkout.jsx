@@ -182,17 +182,48 @@ function Checkout() {
                                                 style={{ cursor: 'pointer' }}
                                             />
                                             <div className="item-details">
-                                                <p
-                                                    className="item-name"
+                                                <p className="item-name"
                                                     onClick={() => navigate(`/clothes/${item.id}`)}
                                                     style={{ cursor: 'pointer' }}
                                                 >
                                                     {item.title}
                                                 </p>
-                                                <p className="item-variant">Size: {item.size} | Qty: {item.quantity || 1}</p>
+                                                <div className="item-controls">
+                                                    <p className="item-variant">Size: {item.size}</p>
+                                                    <div className="qty-adjuster">
+                                                        <button
+                                                            className="qty-btn-minus"
+                                                            onClick={() => updateQuantity(item.cart_item_id, (item.quantity || 1) - 1)}
+                                                        >
+                                                            −
+                                                        </button>
+                                                        <span className="qty-val-checkout">{item.quantity || 1}</span>
+                                                        <button
+                                                            className="qty-btn-plus"
+                                                            onClick={() => updateQuantity(item.cart_item_id, (item.quantity || 1) + 1)}
+                                                        >
+                                                            +
+                                                        </button>
+                                                    </div>
+                                                </div>
                                                 <p className="item-price">
-                                                    {item.quantity > 1 ? `₹${item.price} x ${item.quantity} = ` : ''}
-                                                    ₹{item.price * (item.quantity || 1)}
+                                                    {(() => {
+                                                        const isDiscounted = item.discount_percent > 0 &&
+                                                            (!item.discount_until || new Date(item.discount_until) > new Date());
+                                                        const price = isDiscounted
+                                                            ? Math.floor(item.price * (1 - item.discount_percent / 100))
+                                                            : item.price;
+
+                                                        return (
+                                                            <>
+                                                                {isDiscounted && <span className="original-price" style={{ textDecoration: 'line-through', color: '#999', fontSize: '0.8em', marginRight: '8px' }}>₹{item.price}</span>}
+                                                                <span>
+                                                                    {item.quantity > 1 ? `₹${price} x ${item.quantity} = ` : ''}
+                                                                    ₹{price * (item.quantity || 1)}
+                                                                </span>
+                                                            </>
+                                                        );
+                                                    })()}
                                                 </p>
                                             </div>
                                         </div>
@@ -206,16 +237,24 @@ function Checkout() {
                         <div className="order-summary-card">
                             <h3>Order Summary</h3>
                             <div className="summary-items-list">
-                                {cart.map((item) => (
-                                    <div className="summary-row item-list-row" key={`${item.id}-${item.size}`}>
-                                        <span className="summary-item-name">
-                                            {item.title} {item.quantity > 1 ? `(x${item.quantity})` : ''}
-                                        </span>
-                                        <span className="summary-item-price">
-                                            ₹{item.price * (item.quantity || 1)}
-                                        </span>
-                                    </div>
-                                ))}
+                                {cart.map((item) => {
+                                    const isDiscounted = item.discount_percent > 0 &&
+                                        (!item.discount_until || new Date(item.discount_until) > new Date());
+                                    const price = isDiscounted
+                                        ? Math.floor(item.price * (1 - item.discount_percent / 100))
+                                        : item.price;
+
+                                    return (
+                                        <div className="summary-row item-list-row" key={`${item.id}-${item.size}`}>
+                                            <span className="summary-item-name">
+                                                {item.title} {item.quantity > 1 ? `(x${item.quantity})` : ''}
+                                            </span>
+                                            <span className="summary-item-price">
+                                                ₹{price * (item.quantity || 1)}
+                                            </span>
+                                        </div>
+                                    );
+                                })}
                             </div>
                             <div className="summary-row">
                                 <span>Delivery Fee:</span>

@@ -1,5 +1,6 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
+import { supabase } from './lib/supabase';
 import Home from "./Pages/Home";
 import Shop from "./Pages/Shop";
 import Notfound from "./Pages/Notfound";
@@ -8,8 +9,10 @@ import Contact from "./Pages/Contact";
 import Profile from "./Pages/Profile";
 import Checkout from "./Pages/Checkout";
 import AdminDashboard from "./Pages/Admin/AdminDashboard";
-import { useUser } from "./context/UserContext";
+import ResetPassword from "./Pages/ResetPassword";
+import { useUser } from "./context/UserContext.jsx";
 import ScrollToTop from "./Components/ScrollToTop";
+import Skeleton from "./Components/Skeleton";
 import './css/App.css'
 
 function App() {
@@ -18,18 +21,13 @@ function App() {
 
     useEffect(() => {
         const fetchProducts = async () => {
-            try {
-                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/`);
-                const data = await res.json();
-                setProducts(data);
-            } catch (error) {
-                console.error("Error fetching products:", error);
-            }
+            const { data } = await supabase.from('products').select('*');
+            if (data) setProducts(data);
         };
         fetchProducts();
     }, []);
 
-    if (loading) return null;
+    if (loading) return <Skeleton />;
 
     return (
         <>
@@ -42,6 +40,7 @@ function App() {
                 <Route path="/clothes/:id" element={<Description products={products} />} />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/Admin" element={isAdmin && user ? <AdminDashboard /> : <Navigate to="/" />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="*" element={<Notfound />} />
             </Routes>
         </>

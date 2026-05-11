@@ -26,14 +26,60 @@
     box-shadow: 0 5px 14px hsl(0, 0%, 30%);
 }
 
+.cart-image {
+    position: relative;
+    overflow: hidden;
+}
+
+.best-seller-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 10px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 4px;
+    z-index: 10;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(4px);
+}
+
+.discount-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ff4d4f;
+    color: white;
+    padding: 4px 8px;
+    font-size: 10px;
+    font-weight: 800;
+    border-radius: 4px;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: #888;
+    font-size: 0.85em;
+    margin-right: 5px;
+}
+
 .cart-image img {
     background: hsl(0, 0%, 86%);
     width: 100%;
     cursor: pointer;
     height: 240px;
     border-radius: 2px;
-    cursor: pointer;
     object-fit: contain;
+    transition: transform 0.5s ease;
+}
+
+.cart-card:hover .cart-image img {
+    transform: scale(1.05);
 }
 
 .cart-info {

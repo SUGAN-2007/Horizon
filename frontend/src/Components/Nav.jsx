@@ -3,10 +3,12 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Login from './Login';
 import Addtocart from './CartSidebar';
 import Search from './Search';
+import { supabase } from '../lib/supabase';
 import OrderTracker from './OrderTracker';
 import Notifications from './Notifications';
-import { useCart } from '../context/CartContext';
-import { useUser } from '../context/UserContext';
+import { useCart } from '../context/CartContext.jsx';
+import { useUser } from '../context/UserContext.jsx';
+import { useNotifications } from '../context/NotificationContext.jsx';
 import '../css/Nav.css';
 
 function Nav({ products }) {
@@ -18,6 +20,7 @@ function Nav({ products }) {
     const [showNotif, setShowNotif] = useState(false);
     const { cart } = useCart();
     const { user, showLogin, setShowLogin, isAdmin } = useUser();
+    const { unreadCount, unreadNotifs } = useNotifications();
 
     // Scroll and Visibility States
     const [isVisible, setIsVisible] = useState(true);
@@ -108,8 +111,9 @@ function Nav({ products }) {
                         setOpencart(false);
                         setShowTracker(false);
                     }}>
-                        <div className='notif-icon-wrapper' style={{ position: 'relative' }}>
+                        <div className='icon-wrapper'>
                             <svg className="nav-icon-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                            {unreadCount > 0 && <span className="nav-notif-badge">{unreadCount}</span>}
                         </div>
                     </a>
                     <a title="Track Order" onClick={() => {
@@ -118,7 +122,10 @@ function Nav({ products }) {
                         setSrch(false);
                         setOpencart(false);
                     }}>
-                        <svg className="nav-icon-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                        <div className='icon-wrapper'>
+                            <svg className="nav-icon-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                            {unreadNotifs.some(n => n.type === 'Orders') && <span className="nav-status-dot"></span>}
+                        </div>
                     </a>
                     <a onClick={() => {
                         setSrch(true);

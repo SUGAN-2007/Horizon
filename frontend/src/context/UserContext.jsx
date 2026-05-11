@@ -10,11 +10,11 @@ export const UserProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [showLogin, setShowLogin] = useState(false);
 
-    const fetchProfile = async (userId) => {
+    const fetchProfile = async (auth_user) => {
         const { data, error } = await supabase
             .from('profiles')
             .select('*')
-            .eq('id', userId)
+            .eq('id', auth_user.id)
             .single();
         if (!error) {
             setProfile(data);
@@ -22,7 +22,7 @@ export const UserProvider = ({ children }) => {
             // If profile doesn't exist, create one
             const { data: newProfile, error: createError } = await supabase
                 .from('profiles')
-                .insert([{ id: userId }])
+                .insert([{ id: auth_user.id, email: auth_user.email }])
                 .select()
                 .single();
             if (!createError) setProfile(newProfile);
@@ -33,7 +33,7 @@ export const UserProvider = ({ children }) => {
         supabase.auth.getSession().then(({ data: { session } }) => {
             setSession(session);
             setUser(session?.user ?? null);
-            if (session?.user) fetchProfile(session.user.id);
+            if (session?.user) fetchProfile(session.user);
             setLoading(false);
         });
 
@@ -41,7 +41,7 @@ export const UserProvider = ({ children }) => {
             setSession(session);
             setUser(session?.user ?? null);
             if (session?.user) {
-                fetchProfile(session.user.id);
+                fetchProfile(session.user);
             } else {
                 setProfile(null);
             }
@@ -57,7 +57,13 @@ export const UserProvider = ({ children }) => {
     };
 
     const signup = async (email, password) => {
-        const { data, error } = await supabase.auth.signUp({ email, password });
+        const { data, error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                emailRedirectTo: 'https://horizon-e-com.vercel.app/'
+            }
+        });
         if (error) throw error;
         return data;
     };
@@ -67,8 +73,10 @@ export const UserProvider = ({ children }) => {
         if (error) throw error;
     };
 
+    const isAdmin = profile?.role === 'admin' || user?.email === 'e.com.hori@gmail.com';
+
     return (
-        <UserContext.Provider value={{ session, user, profile, login, signup, logout, loading, isAdmin: profile?.role === 'admin', showLogin, setShowLogin }}>
+        <UserContext.Provider value={{ session, user, profile, login, signup, logout, loading, isAdmin, showLogin, setShowLogin }}>
             {children}
         </UserContext.Provider>
     );

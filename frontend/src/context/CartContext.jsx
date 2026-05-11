@@ -1,127 +1,119 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useUser } from './UserContext';
+import { useUser } from './UserContext.jsx';
+import { supabase } from '../lib/supabase';
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-    const { session, user } = useUser();
+    const { user } = useUser();
     const [cart, setCart] = useState([]);
 
     const fetchCart = async () => {
-        if (!session) return;
-        try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/cart/`, {
-                headers: {
-                    Authorization: `Bearer ${session.access_token}`,
-                },
-            });
-            const data = await res.json();
-            if (Array.isArray(data)) {
-                const formattedData = data.map(item => ({
-                    ...item.products,
-                    cart_item_id: item.id,
-                    quantity: item.quantity,
-                    size: item.size
-                }));
-                setCart(formattedData);
-            }
-        } catch (error) {
-            console.error("Error fetching cart:", error);
+        if (!user) return;
+        const { data, error } = await supabase
+            .from('cart')
+            .select('id, quantity, size, products(*)')
+            .eq('user_id', user.id);
+        if (!error && Array.isArray(data)) {
+            setCart(data.map(item => ({
+                ...item.products,
+                cart_item_id: item.id,
+                quantity: item.quantity,
+                size: item.size
+            })));
         }
     };
 
     useEffect(() => {
-        if (user) {
-            fetchCart();
-        } else {
-            setCart([]);
-        }
-    }, [user, session]);
+        if (user) fetchCart();
+        else setCart([]);
+    }, [user]);
 
     const addToCart = async (product, size, quantity = 1) => {
         if (!user) {
             setCart(prev => [...prev, { ...product, size, quantity }]);
             return;
         }
-        try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/cart/add`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${session.access_token}`,
-                },
-                body: JSON.stringify({ productId: product.id, size, quantity }),
-            });
-            if (res.ok) fetchCart();
-        } catch (error) {
-            console.error("Error adding to cart:", error);
+        const { data: existing } = await supabase
+            .from('cart')
+            .select('*')
+            .eq('user_id', user.id)
+            .eq('product_id', product.id)
+            .eq('size', size)
+            .maybeSingle();
+
+        if (existing) {
+            await supabase.from('cart').update({ quantity: (existing.quantity || 1) + quantity }).eq('id', existing.id);
+        } else {
+            await supabase.from('cart').insert([{ user_id: user.id, product_id: product.id, size, quantity }]);
         }
+        fetchCart();
     };
 
     const removeFromCart = async (cartItemId) => {
         if (!user) {
-            setCart(prev => prev.filter((_, i) => i !== cartItemId)); // Fallback for guest
+            setCart(prev => prev.filter(item => item.cart_item_id !== cartItemId));
             return;
         }
-        try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/cart/remove/${cartItemId}`, {
-                method: "DELETE",
-                headers: {
-                    Authorization: `Bearer ${session.access_token}`,
-                },
-            });
-            if (res.ok) fetchCart();
-        } catch (error) {
-            console.error("Error removing from cart:", error);
-        }
+        await supabase.from('cart').delete().eq('id', cartItemId);
+        fetchCart();
     };
 
     const updateQuantity = async (cartItemId, quantity) => {
         if (quantity < 1) return removeFromCart(cartItemId);
         if (!user) {
-            setCart(prev => prev.map((item, i) => i === cartItemId ? { ...item, quantity } : item));
+            setCart(prev => prev.map(item => item.cart_item_id === cartItemId ? { ...item, quantity } : item));
             return;
         }
-        try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/cart/update/${cartItemId}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${session.access_token}`,
-                },
-                body: JSON.stringify({ quantity }),
-            });
-            if (res.ok) fetchCart();
-        } catch (error) {
-            console.error("Error updating cart quantity:", error);
-        }
+        await supabase.from('cart').update({ quantity }).eq('id', cartItemId);
+        fetchCart();
     };
-
 
     const placeOrder = async (orderData) => {
         if (!user || cart.length === 0) return;
+
+        // Get current session token to authenticate with Edge Function
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) return;
+
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/place`, {
-                method: "POST",
+            // Call Edge Function — handles DB insert + email notification
+            const { data, error: invokeError } = await supabase.functions.invoke('api/orders/place', {
+                method: 'POST',
                 headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${session.access_token}`,
+                    Authorization: `Bearer ${session.access_token}`
                 },
-                body: JSON.stringify(orderData)
+                body: {
+                    address: orderData.address,
+                    phone: orderData.phone,
+                    paymentMethod: orderData.paymentMethod || 'COD',
+                    cartItems: cart,
+                }
             });
-            if (res.ok) {
-                const data = await res.json();
-                setCart([]);
-                return data;
+
+            if (invokeError) {
+                console.error('Order placement failed:', invokeError);
+                return false;
             }
+
+            setCart([]);
+            return true; // Return boolean for Checkout.jsx logic
         } catch (error) {
-            console.error("Error placing order:", error);
+            console.error('Error placing order:', error);
+            return false;
         }
     };
 
-    const calculateTotal = () => {
-        return cart.reduce((total, item) => total + (item.price * (item.quantity || 1)), 0);
-    };
+    const calculateTotal = () => cart.reduce((total, item) => {
+        const isDiscountActive = item.discount_percent > 0 &&
+            (!item.discount_until || new Date(item.discount_until) > new Date());
+
+        const price = isDiscountActive
+            ? Math.floor(item.price * (1 - item.discount_percent / 100))
+            : item.price;
+
+        return total + (price * (item.quantity || 1));
+    }, 0);
 
     return (
         <CartContext.Provider value={{ cart, setCart, fetchCart, addToCart, removeFromCart, updateQuantity, placeOrder, calculateTotal }}>
