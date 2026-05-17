@@ -65,6 +65,18 @@ export const UserProvider = ({ children }) => {
             }
         });
         if (error) throw error;
+        
+        // Trigger welcome email via our backend
+        try {
+            await fetch('http://localhost:5000/api/auth/welcome', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
+        } catch (err) {
+            console.error("Failed to send welcome email request:", err);
+        }
+
         return data;
     };
 

@@ -1,7 +1,7 @@
 import express from "express";
 import { supabase } from "../supabaseClient.js";
 import { verifyAdmin } from "../middleware/verifyuser.js";
-
+import { sendProductNotificationEmail } from "../utils/mailer.js";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -45,12 +45,33 @@ router.post("/add", verifyAdmin, async (req, res) => {
     .select();
 
   if (error) return res.status(500).json({ error: error.message });
+
+  // Notify all users about new product
+  try {
+    const { data: { users }, error: usersError } = await supabase.auth.admin.listUsers();
+    if (!usersError && users) {
+      users.forEach(user => {
+        if (user.email) {
+          sendProductNotificationEmail(user.email, title, false);
+        }
+      });
+    }
+  } catch (err) {
+    console.error("Failed to notify users about new product:", err);
+  }
+
   res.json({ message: "Product added successfully", product: data[0] });
 });
 
 // Admin ONLY: Update product
 router.put("/:id", verifyAdmin, async (req, res) => {
   const { title, description, category, price, image, sizes } = req.body;
+
+  const { data: oldData } = await supabase
+    .from("products")
+    .select("price")
+    .eq("id", req.params.id)
+    .single();
 
   const { data, error } = await supabase
     .from("products")
@@ -66,6 +87,23 @@ router.put("/:id", verifyAdmin, async (req, res) => {
     .select();
 
   if (error) return res.status(500).json({ error: error.message });
+
+  // If price decreased, notify users about discount
+  if (oldData && parseFloat(price) < oldData.price) {
+    try {
+      const { data: { users }, error: usersError } = await supabase.auth.admin.listUsers();
+      if (!usersError && users) {
+        users.forEach(user => {
+          if (user.email) {
+            sendProductNotificationEmail(user.email, title, true);
+          }
+        });
+      }
+    } catch (err) {
+      console.error("Failed to notify users about discount:", err);
+    }
+  }
+
   res.json({ message: "Product updated successfully", product: data[0] });
 });
 

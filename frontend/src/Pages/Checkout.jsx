@@ -6,7 +6,7 @@ import Nav from '../Components/Nav';
 import '../css/Checkout.css';
 
 function Checkout() {
-    const { cart, calculateTotal, placeOrder } = useCart();
+    const { cart, calculateTotal, placeOrder, updateQuantity } = useCart();
     const { profile, user } = useUser();
     const navigate = useNavigate();
     const [paymentMethod, setPaymentMethod] = useState('COD');
@@ -173,8 +173,8 @@ function Checkout() {
                             </div>
                             <div className="section-content">
                                 <div className="checkout-items">
-                                    {cart.map((item) => (
-                                        <div key={item.cart_item_id} className="checkout-item-card">
+                                    {[...cart].sort((a, b) => (b.quantity || 1) - (a.quantity || 1)).map((item) => (
+                                        <div key={item.cart_item_id} className={`checkout-item-card ${item.quantity === 0 ? 'removed-item' : ''}`}>
                                             <img
                                                 src={item.image}
                                                 alt={item.title}
@@ -193,14 +193,14 @@ function Checkout() {
                                                     <div className="qty-adjuster">
                                                         <button
                                                             className="qty-btn-minus"
-                                                            onClick={() => updateQuantity(item.cart_item_id, (item.quantity || 1) - 1)}
+                                                            onClick={() => updateQuantity(item.cart_item_id, item.quantity - 1)}
                                                         >
                                                             −
                                                         </button>
-                                                        <span className="qty-val-checkout">{item.quantity || 1}</span>
+                                                        <span className={`qty-val-checkout ${item.quantity === 0 ? 'qty-zero' : ''}`}>{item.quantity ?? 1}</span>
                                                         <button
                                                             className="qty-btn-plus"
-                                                            onClick={() => updateQuantity(item.cart_item_id, (item.quantity || 1) + 1)}
+                                                            onClick={() => updateQuantity(item.cart_item_id, item.quantity + 1)}
                                                         >
                                                             +
                                                         </button>
@@ -237,7 +237,7 @@ function Checkout() {
                         <div className="order-summary-card">
                             <h3>Order Summary</h3>
                             <div className="summary-items-list">
-                                {cart.map((item) => {
+                                {cart.filter(item => item.quantity > 0).map((item) => {
                                     const isDiscounted = item.discount_percent > 0 &&
                                         (!item.discount_until || new Date(item.discount_until) > new Date());
                                     const price = isDiscounted
@@ -271,7 +271,7 @@ function Checkout() {
                             <button
                                 className="place-order-btn"
                                 onClick={handlePlaceOrder}
-                                disabled={loading}
+                                disabled={loading || calculateTotal() === 0}
                             >
                                 {loading ? 'Processing...' : 'Place Order'}
                             </button>

@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useUser } from '../context/UserContext';
+import { useNotifications } from '../context/NotificationContext';
 import '../css/OrderTracker.css';
 
 function OrderTracker({ isOpen, onClose }) {
     const { user, session } = useUser();
+    const { unreadNotifs, markAsRead } = useNotifications();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [expandedOrderId, setExpandedOrderId] = useState(null);
 
     useEffect(() => {
         if (isOpen && user) {
@@ -37,6 +40,11 @@ function OrderTracker({ isOpen, onClose }) {
         return steps.indexOf(status);
     };
 
+    const handleOrderClick = (orderId) => {
+        markAsRead(orderId);
+        setExpandedOrderId(prev => prev === orderId ? null : orderId);
+    };
+
     return (
         <div className="tracker-overlay" onClick={onClose}>
             <div className="tracker-content" onClick={e => e.stopPropagation()}>
@@ -49,8 +57,12 @@ function OrderTracker({ isOpen, onClose }) {
                     {loading ? <p>Checking status...</p> : (
                         orders.length === 0 ? <p className="no-orders text-muted">No active orders found.</p> : (
                             <div className="tracker-list">
-                                {orders.map(order => (
-                                    <div key={order.id} className="tracker-card">
+                                {orders.map(order => {
+                                    const isUnread = unreadNotifs.some(n => n.id === order.id);
+                                    const isExpanded = expandedOrderId === order.id;
+
+                                    return (
+                                    <div key={order.id} className={`tracker-card ${isExpanded ? 'expanded' : ''}`} onClick={() => handleOrderClick(order.id)} style={{ cursor: 'pointer' }}>
                                         <div className="tracker-card-top">
                                             <span className="order-id">#{order.id.slice(0, 8)}</span>
                                             <span className="order-date">{new Date(order.created_at).toLocaleDateString()}</span>
@@ -61,7 +73,9 @@ function OrderTracker({ isOpen, onClose }) {
                                                 const currentStep = getStatusStep(order.status);
                                                 let state = "pending";
                                                 if (i < currentStep) state = "done";
-                                                if (i === currentStep) state = "active";
+                                                if (i === currentStep) {
+                                                    state = isUnread ? "active unread" : "active";
+                                                }
 
                                                 return (
                                                     <div key={step} className={`timeline-step ${state}`}>
@@ -72,15 +86,35 @@ function OrderTracker({ isOpen, onClose }) {
                                             })}
                                         </div>
 
-                                        <div className="tracker-items-summary">
-                                            {order.order_items?.map(it => (
-                                                <div key={it.id} className="mini-item">
-                                                    {it.products?.title} (x{it.quantity})
+                                        {isExpanded ? (
+                                            <div className="tracker-bill-detail">
+                                                <div className="bill-header">
+                                                    <strong>Order Summary</strong>
                                                 </div>
-                                            ))}
-                                        </div>
+                                                <div className="bill-items">
+                                                    {order.order_items?.map(it => (
+                                                        <div key={it.id} className="bill-item-row">
+                                                            <span className="bill-item-title">{it.products?.title} <span className="bill-item-qty">x{it.quantity}</span></span>
+                                                            <span className="bill-item-price">₹{it.price_at_order * it.quantity}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                                <div className="bill-footer">
+                                                    <span>Total</span>
+                                                    <strong>₹{order.total_price}</strong>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="tracker-items-summary">
+                                                {order.order_items?.map(it => (
+                                                    <div key={it.id} className="mini-item">
+                                                        {it.products?.title} (x{it.quantity})
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
-                                ))}
+                                )})}
                             </div>
                         )
                     )}

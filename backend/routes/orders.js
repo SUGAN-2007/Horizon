@@ -1,7 +1,7 @@
 import express from "express";
 import { supabase } from "../supabaseClient.js";
 import { verifyUser, verifyAdmin } from "../middleware/verifyuser.js";
-import { sendOrderEmail } from "../utils/mailer.js";
+import { sendOrderEmail, sendOrderStatusUpdateEmail } from "../utils/mailer.js";
 
 const router = express.Router();
 
@@ -95,6 +95,16 @@ router.put("/status/:orderId", verifyAdmin, async (req, res) => {
             .select();
 
         if (error) throw error;
+        
+        if (data && data.length > 0) {
+            const orderUserId = data[0].user_id;
+            const { data: userData, error: userError } = await supabase.auth.admin.getUserById(orderUserId);
+            if (!userError && userData && userData.user) {
+                const userEmail = userData.user.email;
+                await sendOrderStatusUpdateEmail(userEmail, orderId, status);
+            }
+        }
+
         console.log("Update success:", data);
         res.json({ message: "Status updated", data });
     } catch (err) {

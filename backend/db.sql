@@ -17,7 +17,7 @@ CREATE TABLE public.order_items (
   order_id uuid,
   product_id bigint,
   size text,
-  quantity integer,
+  quantity integer NOT NULL DEFAULT 1,
   price_at_order numeric NOT NULL,
   CONSTRAINT order_items_pkey PRIMARY KEY (id),
   CONSTRAINT order_items_order_id_fkey FOREIGN KEY (order_id) REFERENCES public.orders(id),

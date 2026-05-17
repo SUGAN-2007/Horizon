@@ -7,6 +7,7 @@ import cartRoutes from "./routes/cart.js";
 import productRoutes from "./routes/products.js";
 import orderRoutes from "./routes/orders.js";
 import reviewRoutes from "./routes/reviews.js";
+import authRoutes from "./routes/auth.js";
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {
   console.log("server is on");

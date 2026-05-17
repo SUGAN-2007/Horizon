@@ -169,6 +169,60 @@
     gap: 20px;
     padding-bottom: 20px;
     border-bottom: 1px solid #f5f5f5;
+    transition: all 0.3s ease;
+}
+
+.checkout-item-card.removed-item {
+    opacity: 0.5;
+    filter: grayscale(0.5);
+    background: #fafafa;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px dashed #ccc;
+    margin: 5px 0;
+}
+
+.checkout-item-card.removed-item .item-name {
+    text-decoration: line-through;
+    color: #888;
+}
+
+.checkout-item-card.removed-item .item-price span:last-child {
+    display: none;
+}
+
+.checkout-item-card.removed-item::after {
+    content: "REMOVED FROM ORDER";
+    font-size: 10px;
+    font-weight: 800;
+    color: #ef4444;
+    background: #fee2e2;
+    padding: 4px 10px;
+    border-radius: 4px;
+    height: fit-content;
+    margin-top: auto;
+}
+
+.checkout-item-card.removed-item .qty-btn-plus {
+    opacity: 1;
+    background: #000 !important;
+    color: #fff !important;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transform: scale(1.1);
+}
+
+.checkout-item-card.removed-item .qty-btn-plus:hover {
+    background: #333 !important;
+    transform: scale(1.15);
+}
+
+.checkout-item-card.removed-item .qty-adjuster {
+    opacity: 1;
+    background: #fff;
+    border: 1.5px solid #000;
+    padding: 3px;
+    border-radius: 10px;
 }
 
 .checkout-item-card:last-child {
@@ -253,6 +307,10 @@
     font-weight: 700;
     font-size: 14px;
     color: #333;
+}
+
+.qty-val-checkout.qty-zero {
+    color: #ef4444;
 }
 
 /* Order Summary */

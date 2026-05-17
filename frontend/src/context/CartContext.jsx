@@ -31,7 +31,17 @@ export const CartProvider = ({ children }) => {
 
     const addToCart = async (product, size, quantity = 1) => {
         if (!user) {
-            setCart(prev => [...prev, { ...product, size, quantity }]);
+            setCart(prev => {
+                const existing = prev.find(item => item.id === product.id && item.size === size);
+                if (existing) {
+                    return prev.map(item => 
+                        item.id === product.id && item.size === size 
+                            ? { ...item, quantity: (item.quantity || 1) + quantity } 
+                            : item
+                    );
+                }
+                return [...prev, { ...product, size, quantity, cart_item_id: Date.now() + Math.random() }];
+            });
             return;
         }
         const { data: existing } = await supabase
@@ -60,7 +70,7 @@ export const CartProvider = ({ children }) => {
     };
 
     const updateQuantity = async (cartItemId, quantity) => {
-        if (quantity < 1) return removeFromCart(cartItemId);
+        if (quantity < 0) return; // Don't allow negative quantity
         if (!user) {
             setCart(prev => prev.map(item => item.cart_item_id === cartItemId ? { ...item, quantity } : item));
             return;
@@ -87,7 +97,7 @@ export const CartProvider = ({ children }) => {
                     address: orderData.address,
                     phone: orderData.phone,
                     paymentMethod: orderData.paymentMethod || 'COD',
-                    cartItems: cart,
+                    cartItems: cart.filter(item => item.quantity > 0),
                 }
             });
 
@@ -104,7 +114,9 @@ export const CartProvider = ({ children }) => {
         }
     };
 
-    const calculateTotal = () => cart.reduce((total, item) => {
+    const calculateTotal = () => cart
+        .filter(item => item.quantity > 0)
+        .reduce((total, item) => {
         const isDiscountActive = item.discount_percent > 0 &&
             (!item.discount_until || new Date(item.discount_until) > new Date());
 

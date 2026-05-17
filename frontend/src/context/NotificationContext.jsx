@@ -103,10 +103,14 @@ export const NotificationProvider = ({ children }) => {
         forceUnread: order.status === 'Pending' || order.status === 'Packing' || order.status === 'Out for Delivery'
     }));
 
-    const allNotifs = [...orderNotifs, ...staticNotifs].map(n => ({
+    const allNotifs = [...staticNotifs, ...orderNotifs].map(n => ({
         ...n,
         unread: !readIds.includes(n.id) && (n.forceUnread !== undefined ? n.forceUnread : true)
-    }));
+    })).sort((a, b) => {
+        if (a.unread && !b.unread) return -1;
+        if (!a.unread && b.unread) return 1;
+        return 0;
+    });
 
     const unreadNotifs = allNotifs.filter(n => n.unread);
     const unreadCount = unreadNotifs.length;
