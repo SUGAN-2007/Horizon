@@ -2,7 +2,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-const BREVO_API_KEY = process.env.BREVO_API_KEY || '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';
+const BREVO_API_KEY = process.env.BREVO_API_KEY;
 const SENDER_EMAIL = 'e.com.hori@gmail.com';
 const ADMIN_EMAIL = 'e.com.hori@gmail.com';
 
